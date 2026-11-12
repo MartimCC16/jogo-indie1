@@ -171,6 +171,23 @@ def gerar_lobo():
     img.save(RAIZ / "assets/sprites/inimigos/lobo_nevoa.png")
 
 
+def gerar_armadura_caida():
+    # Sir Eco caído na areia, deitado de lado: 32x16, um quadro só.
+    img = nova(32, 16)
+    ret(img, 2, 5, 9, 8, PRATA)             # elmo (à esquerda)
+    ret(img, 2, 5, 9, 1, PRATA_CL)
+    ret(img, 4, 7, 2, 5, PRETO)             # viseira vazia
+    px(img, 4, 8, OLHO_AZUL)                # olhos ainda com um brilho fraco
+    px(img, 4, 10, OLHO_AZUL)
+    ret(img, 11, 4, 12, 9, PRATA)           # peitoral
+    ret(img, 11, 4, 12, 1, PRATA_CL)
+    ret(img, 23, 6, 8, 3, PRATA_ESC)        # pernas
+    ret(img, 23, 10, 8, 3, PRATA_ESC)
+    ret(img, 12, 12, 9, 4, AZUL_MARINHO)    # escudo enorme por baixo
+    ret(img, 15, 13, 3, 2, PRATA_CL)
+    img.save(RAIZ / "assets/sprites/personagens/armadura_caida.png")
+
+
 # ----------------------------------------------------------------- tileset --
 # tileset_vila.png: 8 colunas x 2 linhas de tiles 16x16 (128 x 32 pixels)
 #  Linha 0: 0 grama | 1 grama c/ flor | 2 caminho | 3 areia | 4 água | 5 espuma | 6 rocha | 7 árvore
@@ -234,6 +251,7 @@ if __name__ == "__main__":
     folha_personagem(desenha_lia, "lia.png")
     folha_personagem(desenha_eco, "sir_eco.png")
     folha_personagem(desenha_aldeao, "aldeao.png")
+    gerar_armadura_caida()
     gerar_lobo()
     gerar_tileset()
     gerar_icone()

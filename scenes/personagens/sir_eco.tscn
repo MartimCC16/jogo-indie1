@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/personagens/seguidor.gd" id="1_seguidor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/personagens/sir_eco.png" id="2_eco"]
+
+[node name="SirEco" type="Node2D"]
+script = ExtResource("1_seguidor")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_eco")
+hframes = 2
+vframes = 4

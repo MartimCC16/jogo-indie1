@@ -1,0 +1,71 @@
+{
+  "_comentario": "Falas do evento da praia (scripts/mundo/evento_despertar_eco.gd). Até ~110 letras por fala.",
+  "praia_examinar": [
+    {
+      "quem": "lia",
+      "texto": "É a armadura que o Tomé falou... Enorme! Deve ter sido de um cavaleiro da Ordem."
+    },
+    {
+      "quem": "lia",
+      "texto": "Está vazia por dentro. Nem um osso, nem um pano. Só... névoa."
+    },
+    {
+      "quem": "narrador",
+      "texto": "A Lanterna de Luz começa a brilhar sozinha na mão de Lia."
+    },
+    {
+      "quem": "lia",
+      "texto": "O quê?! A lanterna... está reagindo à armadura?"
+    }
+  ],
+  "praia_despertar": [
+    {
+      "quem": "eco",
+      "texto": "...Luz. Eu... vejo luz."
+    },
+    {
+      "quem": "lia",
+      "texto": "A armadura FALOU! Q-quem é você?! Tem alguém aí dentro?"
+    },
+    {
+      "quem": "eco",
+      "texto": "Dentro? Não há ninguém dentro. Há apenas... eu. Acho."
+    },
+    {
+      "quem": "eco",
+      "texto": "Não lembro meu nome. Nem de onde vim. A névoa levou tudo."
+    },
+    {
+      "quem": "lia",
+      "texto": "Sua voz ecoa dentro do elmo, igual a um sino vazio..."
+    },
+    {
+      "quem": "lia",
+      "texto": "Então vou te chamar de Eco. Sir Eco! Todo cavaleiro precisa de um nome, não é?"
+    },
+    {
+      "quem": "eco",
+      "texto": "Sir Eco. ...Gosto disso. Foi você quem me acordou com essa luz, escudeira?"
+    },
+    {
+      "quem": "lia",
+      "texto": "Meu nome é Lia. Esta é a Lanterna de Luz. Dizem que ela pode reacender as Torres."
+    },
+    {
+      "quem": "eco",
+      "texto": "Então talvez ela também reacenda minhas memórias. Vou com você, Lia."
+    },
+    {
+      "quem": "narrador",
+      "texto": "De repente, um uivo longo atravessa a névoa, vindo da floresta ao norte."
+    },
+    {
+      "quem": "lia",
+      "texto": "Isso não é um lobo comum... Fique perto de mim, Sir Eco!"
+    },
+    {
+      "quem": "eco",
+      "texto": "Meu escudo é seu. Ninguém vai te ferir enquanto eu estiver de pé."
+    }
+  ]
+}

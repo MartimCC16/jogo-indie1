@@ -115,6 +115,15 @@ func vetor_olhar() -> Vector2:
 	return Vector2.DOWN
 
 
+## Vira o personagem para olhar na direção de um ponto (usado em cenas).
+func olhar_para(ponto: Vector2) -> void:
+	var dif := ponto - global_position
+	if abs(dif.x) > abs(dif.y):
+		direcao_olhar = Direcao.DIREITA if dif.x > 0 else Direcao.ESQUERDA
+	else:
+		direcao_olhar = Direcao.BAIXO if dif.y > 0 else Direcao.CIMA
+
+
 ## Impede a câmera de mostrar o que está fora do retângulo (em pixels).
 func limitar_camera(retangulo: Rect2) -> void:
 	camera.limit_left = int(retangulo.position.x)

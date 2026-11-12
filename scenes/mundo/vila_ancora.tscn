@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/mundo/vila_ancora.gd" id="1_vila"]
 [ext_resource type="Script" path="res://scripts/mundo/mapa_de_texto.gd" id="2_mapa"]
 [ext_resource type="TileSet" path="res://assets/tiles/tileset_vila.tres" id="3_tileset"]
 [ext_resource type="PackedScene" path="res://scenes/personagens/lia.tscn" id="4_lia"]
 [ext_resource type="PackedScene" path="res://scenes/personagens/npc.tscn" id="5_npc"]
+[ext_resource type="PackedScene" path="res://scenes/personagens/sir_eco.tscn" id="6_eco"]
+[ext_resource type="PackedScene" path="res://scenes/mundo/armadura_caida.tscn" id="7_armadura"]
 
 [node name="VilaAncora" type="Node2D"]
 script = ExtResource("1_vila")
@@ -24,9 +26,6 @@ tile_set = ExtResource("3_tileset")
 [node name="InicioLia" type="Marker2D" parent="Marcadores"]
 position = Vector2(264, 120)
 
-[node name="LocalArmadura" type="Marker2D" parent="Marcadores"]
-position = Vector2(328, 296)
-
 [node name="Entidades" type="Node2D" parent="."]
 y_sort_enabled = true
 
@@ -38,6 +37,16 @@ position = Vector2(104, 130)
 id_npc = "tome"
 dialogo_inicial = "tome_inicio"
 dialogo_repetido = "tome_repetido"
+flag_alternativa = "eco_despertou"
+dialogo_alternativo = "tome_eco"
+
+[node name="ArmaduraCaida" parent="Entidades" instance=ExtResource("7_armadura")]
+position = Vector2(328, 296)
+sir_eco = NodePath("../SirEco")
+
+[node name="SirEco" parent="Entidades" instance=ExtResource("6_eco")]
+visible = false
+position = Vector2(328, 296)
 
 [node name="Interface" type="CanvasLayer" parent="."]
 

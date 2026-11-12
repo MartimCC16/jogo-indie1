@@ -35,5 +35,19 @@
       "quem": "tome",
       "texto": "A armadura está lá na praia, no fim do caminho que desce. Eu é que não chego perto daquilo!"
     }
+  ],
+  "tome_eco": [
+    {
+      "quem": "tome",
+      "texto": "Por todas as redes do mar! A armadura... ANDA?!"
+    },
+    {
+      "quem": "eco",
+      "texto": "Bom dia, senhor. Perdão pelo susto. Sou Sir Eco."
+    },
+    {
+      "quem": "tome",
+      "texto": "E ainda é educada! Lia, minha filha, em que confusão você se meteu agora?"
+    }
   ]
 }

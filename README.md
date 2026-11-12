@@ -49,6 +49,8 @@ Cada quadro tem **16×16**. Colunas = quadros da caminhada (2). Linhas = direç�
 - Linha 0: grama, grama com flor, caminho, areia, água, espuma, rocha, árvore
 - Linha 1: parede, telhado, porta, janela, cerca, piso de madeira, (livre), (livre)
 
+### `armadura_caida.png` — 32×16 px (Sir Eco deitado na areia, antes do evento)
+
 ### `lobo_nevoa.png` — 32×32 px (chefe, um quadro só por enquanto)
 
 ## Mapas em texto (`data/mapas/*.txt`)
@@ -85,6 +87,14 @@ Colisão: definida no `assets/tiles/tileset_vila.tres` (água, rocha, árvore, c
 
 Para usar em código: `await Dialogo.iniciar("res://dialogues/vila_ancora.json", "tome_inicio")`
 
+## Eventos (cenas com roteiro)
+
+O evento da praia está em `scripts/mundo/evento_despertar_eco.gd`. A função
+`_executar_cena()` é um **roteiro** que se lê de cima para baixo; cada `await` quer
+dizer "espere isto terminar". As falas dele estão em `dialogues/praia.json`.
+
+Flags usadas até agora: `conversou_tome`, `eco_despertou`.
+
 ## Autoloads (scripts globais)
 
 | Nome | Arquivo | Para quê |
@@ -117,6 +127,6 @@ Para mudar: **Projeto → Configurações do Projeto → aba Mapa de Entrada**.
 - [x] Etapa 2 — Vila Âncora (tilemap gerado a partir de texto)
 - [x] Etapa 3 — Lia andando, colisão e câmera
 - [x] Etapa 4 — Diálogo com JSON + NPC
-- [ ] Etapa 5 — Evento da praia (Sir Eco desperta)
+- [x] Etapa 5 — Evento da praia (Sir Eco desperta e passa a seguir a Lia)
 - [ ] Etapa 6 — Combate por turnos com timing
 - [ ] Etapa 7 — Chefe: Lobo da Névoa

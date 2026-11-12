@@ -5,7 +5,7 @@
 #   - coloca a Lia no marcador "InicioLia";
 #   - limita a câmera da Lia às bordas do mapa;
 #   - mostra o nome da região na tela e some devagar.
-# Nas próximas etapas, aqui vamos ligar o NPC e o evento da praia.
+#   - se Sir Eco já despertou, faz ele seguir a Lia.
 # ============================================================================
 extends Node2D
 
@@ -16,6 +16,7 @@ extends Node2D
 @onready var lia: Jogador = $Entidades/Lia
 @onready var nome_regiao: Label = $Interface/NomeRegiao
 @onready var inicio_lia: Marker2D = $Marcadores/InicioLia
+@onready var sir_eco: Seguidor = $Entidades/SirEco
 
 
 func _ready() -> void:
@@ -23,7 +24,20 @@ func _ready() -> void:
 	# aqui, o nó "Mapa" já gerou os tiles (se precisava).
 	lia.global_position = inicio_lia.global_position
 	lia.limitar_camera(mapa.retangulo_em_pixels())
+	_preparar_sir_eco()
 	_mostrar_nome_regiao()
+
+
+## Se o Sir Eco já despertou (ex.: voltando para a vila depois), ele já
+## aparece seguindo a Lia e a armadura caída some do mapa.
+func _preparar_sir_eco() -> void:
+	if not EstadoJogo.tem_flag("eco_despertou"):
+		return
+	var armadura := get_node_or_null("Entidades/ArmaduraCaida")
+	if armadura:
+		armadura.queue_free()
+	sir_eco.global_position = lia.global_position
+	sir_eco.seguir(lia)
 
 
 func _mostrar_nome_regiao() -> void:

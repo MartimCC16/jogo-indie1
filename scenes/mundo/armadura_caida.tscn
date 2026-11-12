@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/mundo/evento_despertar_eco.gd" id="1_evento"]
+[ext_resource type="Texture2D" path="res://assets/sprites/personagens/armadura_caida.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_corpo"]
+size = Vector2(28, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_area"]
+size = Vector2(36, 22)
+
+[node name="ArmaduraCaida" type="StaticBody2D"]
+collision_mask = 0
+script = ExtResource("1_evento")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+
+[node name="Colisao" type="CollisionShape2D" parent="."]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_corpo")
+
+[node name="AreaInteracao" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+
+[node name="Forma" type="CollisionShape2D" parent="AreaInteracao"]
+shape = SubResource("RectangleShape2D_area")
