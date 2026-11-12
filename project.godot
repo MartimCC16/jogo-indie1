@@ -12,6 +12,11 @@ run/main_scene="res://scenes/mundo/vila_ancora.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.png"
 
+[autoload]
+
+EstadoJogo="*res://scripts/autoload/estado_jogo.gd"
+Dialogo="*res://scenes/ui/caixa_dialogo.tscn"
+
 [display]
 
 window/size/viewport_width=320
@@ -23,6 +28,7 @@ window/stretch/scale_mode="integer"
 
 [gui]
 
+theme/custom="res://assets/ui/tema.tres"
 theme/default_font_antialiasing=0
 theme/default_font_hinting=0
 theme/default_font_subpixel_positioning=0

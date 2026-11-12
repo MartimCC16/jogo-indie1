@@ -1,0 +1,39 @@
+{
+  "_comentario": "Conversas da Vila Âncora. Cada chave é o ID de uma conversa; cada fala tem \"quem\" (veja personagens.json) e \"texto\". Mantenha cada texto com no máximo ~110 letras para caber na caixa.",
+  "tome_inicio": [
+    {
+      "quem": "tome",
+      "texto": "Ah, Lia! Acordada tão cedo de novo, pequena escudeira?"
+    },
+    {
+      "quem": "lia",
+      "texto": "Bom dia, Tomé. A névoa está mais grossa hoje..."
+    },
+    {
+      "quem": "tome",
+      "texto": "A Névoa do Esquecimento... Ontem a Dona Marta esqueceu o nome do próprio filho."
+    },
+    {
+      "quem": "tome",
+      "texto": "Dizem que é porque as cinco Torres de Luz se apagaram, uma por uma."
+    },
+    {
+      "quem": "lia",
+      "texto": "Enquanto eu tiver esta lanterna, a névoa não vai levar a nossa vila."
+    },
+    {
+      "quem": "tome",
+      "texto": "Hah! Teimosa igual ao seu pai. Escute: a maré trouxe uma coisa estranha para a praia."
+    },
+    {
+      "quem": "tome",
+      "texto": "Uma armadura enorme, toda prateada. Vá dar uma olhada... mas com cuidado!"
+    }
+  ],
+  "tome_repetido": [
+    {
+      "quem": "tome",
+      "texto": "A armadura está lá na praia, no fim do caminho que desce. Eu é que não chego perto daquilo!"
+    }
+  ]
+}

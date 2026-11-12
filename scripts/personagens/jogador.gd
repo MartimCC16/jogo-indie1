@@ -8,6 +8,8 @@
 #   - Sprite2D "Sprite"      : folha 32x64 (2 colunas = passos, 4 linhas = direções)
 #   - CollisionShape2D       : a "caixa" que bate nas paredes (só nos pés)
 #   - Camera2D "Camera"      : a câmera que segue o personagem
+#   - Area2D "SensorInteracao": quadradinho na frente do personagem que
+#                              detecta NPCs/objetos para conversar (camada 4)
 # ============================================================================
 class_name Jogador
 extends CharacterBody2D
@@ -30,12 +32,17 @@ var _quadro_passo := 0
 
 @onready var sprite: Sprite2D = $Sprite
 @onready var camera: Camera2D = $Camera
+@onready var sensor: Area2D = $SensorInteracao
+
+# Distância do sensor até o centro do personagem, e um ajuste para os pés.
+const DISTANCIA_SENSOR := 10.0
+const AJUSTE_SENSOR := Vector2(0, 4)
 
 
 # _physics_process roda em passos fixos (60x por segundo), ideal para movimento.
 func _physics_process(delta: float) -> void:
 	var entrada := Vector2.ZERO
-	if pode_mover:
+	if _pode_agir():
 		# Junta as 4 teclas num vetor. Na diagonal ele já vem "normalizado"
 		# (tamanho 1), então andar na diagonal não fica mais rápido.
 		entrada = Input.get_vector("mover_esquerda", "mover_direita", "mover_cima", "mover_baixo")
@@ -46,6 +53,33 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	_atualizar_animacao(entrada, delta)
+	# O sensor fica sempre na frente de onde o personagem olha.
+	sensor.position = AJUSTE_SENSOR + vetor_olhar() * DISTANCIA_SENSOR
+
+
+# _unhandled_input recebe as teclas que nenhuma interface "pegou" antes.
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("acao") and _pode_agir():
+		var alvo := _alvo_de_interacao()
+		if alvo:
+			# Marca a tecla como usada, para a caixa de diálogo não pular
+			# a primeira fala com este mesmo aperto.
+			get_viewport().set_input_as_handled()
+			alvo.call("interagir", self)  # chama a função interagir() do alvo
+
+
+## O personagem só anda/interage se estiver liberado E sem diálogo aberto.
+func _pode_agir() -> bool:
+	return pode_mover and not Dialogo.esta_ativo
+
+
+## Procura, entre as áreas que o sensor está tocando, algo com "interagir()".
+func _alvo_de_interacao() -> Node:
+	for area in sensor.get_overlapping_areas():
+		var dono := area.get_parent()
+		if dono.has_method("interagir"):
+			return dono
+	return null
 
 
 func _atualizar_animacao(entrada: Vector2, delta: float) -> void:

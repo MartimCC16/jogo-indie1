@@ -1,0 +1,23 @@
+{
+  "_comentario": "Nome exibido e cor de cada personagem nos diálogos. A chave (ex.: \"lia\") é o que vai no campo \"quem\" das falas.",
+  "lia": {
+    "nome": "Lia",
+    "cor": "#ff9a6a"
+  },
+  "eco": {
+    "nome": "Sir Eco",
+    "cor": "#7fdcff"
+  },
+  "tome": {
+    "nome": "Velho Tomé",
+    "cor": "#a8e07a"
+  },
+  "malvoran": {
+    "nome": "Malvoran",
+    "cor": "#c07aff"
+  },
+  "narrador": {
+    "nome": "",
+    "cor": "#ffffff"
+  }
+}

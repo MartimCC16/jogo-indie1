@@ -63,6 +63,44 @@ Colisão: definida no `assets/tiles/tileset_vila.tres` (água, rocha, árvore, c
 > Ao exportar o jogo no futuro, adicione `*.txt, *.json` em
 > **Exportar → Recursos → Filtros para exportar arquivos que não são recursos**.
 
+## Diálogos em JSON (`dialogues/`)
+
+- `dialogues/personagens.json` — nome exibido e cor de cada personagem.
+- `dialogues/vila_ancora.json` — as conversas da vila. Formato:
+
+```json
+{
+  "tome_inicio": [
+    { "quem": "tome", "texto": "Ah, Lia! Acordada tão cedo?" },
+    { "quem": "lia",  "texto": "Bom dia, Tomé." }
+  ]
+}
+```
+
+- `"tome_inicio"` é o **ID** da conversa (é ele que o NPC usa no Inspetor).
+- `"quem"` é uma chave de `personagens.json`. Use `"narrador"` para texto sem nome.
+- Cada `"texto"` deve ter até ~110 letras para caber na caixa.
+- Cuidado com as vírgulas: entre falas sim, depois da última não. Se errar,
+  o Godot mostra no painel **Depurador** a linha do erro.
+
+Para usar em código: `await Dialogo.iniciar("res://dialogues/vila_ancora.json", "tome_inicio")`
+
+## Autoloads (scripts globais)
+
+| Nome | Arquivo | Para quê |
+|---|---|---|
+| `EstadoJogo` | `scripts/autoload/estado_jogo.gd` | Flags da história (o que já aconteceu). |
+| `Dialogo` | `scenes/ui/caixa_dialogo.tscn` | A caixa de diálogo. |
+
+Ficam em **Projeto → Configurações do Projeto → Globais** (aba Autoload).
+
+## Visual da interface
+
+`assets/ui/tema.tres` é o **tema** do jogo inteiro: tamanho da fonte, cor do texto e
+estilo das caixas. Dê dois cliques nele no Godot para editar. Para usar uma fonte
+pixel art, coloque o arquivo `.ttf` em `assets/fontes/` e escolha-o em
+**Default Font** no tema.
+
 ## Controles
 
 | Ação | Teclas |
@@ -78,7 +116,7 @@ Para mudar: **Projeto → Configurações do Projeto → aba Mapa de Entrada**.
 - [x] Etapa 1 — estrutura, configuração pixel art, placeholders
 - [x] Etapa 2 — Vila Âncora (tilemap gerado a partir de texto)
 - [x] Etapa 3 — Lia andando, colisão e câmera
-- [ ] Etapa 4 — Diálogo com JSON + NPC
+- [x] Etapa 4 — Diálogo com JSON + NPC
 - [ ] Etapa 5 — Evento da praia (Sir Eco desperta)
 - [ ] Etapa 6 — Combate por turnos com timing
 - [ ] Etapa 7 — Chefe: Lobo da Névoa

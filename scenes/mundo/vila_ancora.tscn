@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/mundo/vila_ancora.gd" id="1_vila"]
 [ext_resource type="Script" path="res://scripts/mundo/mapa_de_texto.gd" id="2_mapa"]
 [ext_resource type="TileSet" path="res://assets/tiles/tileset_vila.tres" id="3_tileset"]
 [ext_resource type="PackedScene" path="res://scenes/personagens/lia.tscn" id="4_lia"]
+[ext_resource type="PackedScene" path="res://scenes/personagens/npc.tscn" id="5_npc"]
 
 [node name="VilaAncora" type="Node2D"]
 script = ExtResource("1_vila")
@@ -23,9 +24,6 @@ tile_set = ExtResource("3_tileset")
 [node name="InicioLia" type="Marker2D" parent="Marcadores"]
 position = Vector2(264, 120)
 
-[node name="PosicaoAldeao" type="Marker2D" parent="Marcadores"]
-position = Vector2(120, 136)
-
 [node name="LocalArmadura" type="Marker2D" parent="Marcadores"]
 position = Vector2(328, 296)
 
@@ -34,6 +32,12 @@ y_sort_enabled = true
 
 [node name="Lia" parent="Entidades" instance=ExtResource("4_lia")]
 position = Vector2(264, 120)
+
+[node name="Tome" parent="Entidades" instance=ExtResource("5_npc")]
+position = Vector2(104, 130)
+id_npc = "tome"
+dialogo_inicial = "tome_inicio"
+dialogo_repetido = "tome_repetido"
 
 [node name="Interface" type="CanvasLayer" parent="."]
 

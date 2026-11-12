@@ -1,10 +1,13 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/personagens/jogador.gd" id="1_jogador"]
 [ext_resource type="Texture2D" path="res://assets/sprites/personagens/lia.png" id="2_lia"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pes"]
 size = Vector2(10, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sensor"]
+size = Vector2(10, 10)
 
 [node name="Lia" type="CharacterBody2D"]
 collision_layer = 2
@@ -24,3 +27,12 @@ shape = SubResource("RectangleShape2D_pes")
 [node name="Camera" type="Camera2D" parent="."]
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
+
+[node name="SensorInteracao" type="Area2D" parent="."]
+position = Vector2(0, 14)
+collision_layer = 0
+collision_mask = 8
+monitorable = false
+
+[node name="Forma" type="CollisionShape2D" parent="SensorInteracao"]
+shape = SubResource("RectangleShape2D_sensor")
