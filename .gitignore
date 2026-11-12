@@ -1,0 +1,5 @@
+# Pasta de cache do Godot 4 (é recriada automaticamente)
+.godot/
+# Exportações do jogo
+/exportar/
+*.tmp
