@@ -2,10 +2,10 @@
 # vila_ancora.gd  —  Script principal da cena da Vila Âncora
 # ----------------------------------------------------------------------------
 # Por enquanto ele:
-#   - limita a câmera às bordas do mapa (para não mostrar o "vazio" de fora);
-#   - posiciona a câmera no ponto onde a Lia vai começar;
+#   - coloca a Lia no marcador "InicioLia";
+#   - limita a câmera da Lia às bordas do mapa;
 #   - mostra o nome da região na tela e some devagar.
-# Nas próximas etapas, aqui vamos colocar a Lia, o NPC e o evento da praia.
+# Nas próximas etapas, aqui vamos ligar o NPC e o evento da praia.
 # ============================================================================
 extends Node2D
 
@@ -13,7 +13,7 @@ extends Node2D
 @export var nome_da_regiao := "Vila Âncora"
 
 @onready var mapa: MapaDeTexto = $Mapa
-@onready var camera: Camera2D = $CameraTeste
+@onready var lia: Jogador = $Entidades/Lia
 @onready var nome_regiao: Label = $Interface/NomeRegiao
 @onready var inicio_lia: Marker2D = $Marcadores/InicioLia
 
@@ -21,17 +21,9 @@ extends Node2D
 func _ready() -> void:
 	# Obs.: o _ready() dos filhos roda ANTES do pai. Então, quando chegamos
 	# aqui, o nó "Mapa" já gerou os tiles (se precisava).
-	_limitar_camera_ao_mapa()
-	camera.position = inicio_lia.position
+	lia.global_position = inicio_lia.global_position
+	lia.limitar_camera(mapa.retangulo_em_pixels())
 	_mostrar_nome_regiao()
-
-
-func _limitar_camera_ao_mapa() -> void:
-	var limites := mapa.retangulo_em_pixels()
-	camera.limit_left = int(limites.position.x)
-	camera.limit_top = int(limites.position.y)
-	camera.limit_right = int(limites.end.x)
-	camera.limit_bottom = int(limites.end.y)
 
 
 func _mostrar_nome_regiao() -> void:

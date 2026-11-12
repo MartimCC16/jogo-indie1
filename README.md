@@ -77,7 +77,7 @@ Para mudar: **Projeto → Configurações do Projeto → aba Mapa de Entrada**.
 
 - [x] Etapa 1 — estrutura, configuração pixel art, placeholders
 - [x] Etapa 2 — Vila Âncora (tilemap gerado a partir de texto)
-- [ ] Etapa 3 — Lia andando, colisão e câmera
+- [x] Etapa 3 — Lia andando, colisão e câmera
 - [ ] Etapa 4 — Diálogo com JSON + NPC
 - [ ] Etapa 5 — Evento da praia (Sir Eco desperta)
 - [ ] Etapa 6 — Combate por turnos com timing

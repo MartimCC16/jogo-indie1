@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/mundo/vila_ancora.gd" id="1_vila"]
 [ext_resource type="Script" path="res://scripts/mundo/mapa_de_texto.gd" id="2_mapa"]
 [ext_resource type="TileSet" path="res://assets/tiles/tileset_vila.tres" id="3_tileset"]
-[ext_resource type="Script" path="res://scripts/teste/camera_teste.gd" id="4_camera"]
+[ext_resource type="PackedScene" path="res://scenes/personagens/lia.tscn" id="4_lia"]
 
 [node name="VilaAncora" type="Node2D"]
 script = ExtResource("1_vila")
@@ -29,8 +29,11 @@ position = Vector2(120, 136)
 [node name="LocalArmadura" type="Marker2D" parent="Marcadores"]
 position = Vector2(328, 296)
 
-[node name="CameraTeste" type="Camera2D" parent="."]
-script = ExtResource("4_camera")
+[node name="Entidades" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Lia" parent="Entidades" instance=ExtResource("4_lia")]
+position = Vector2(264, 120)
 
 [node name="Interface" type="CanvasLayer" parent="."]
 
