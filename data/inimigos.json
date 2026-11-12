@@ -1,0 +1,54 @@
+{
+  "_comentario": "Inimigos. Desenhe o sprite OLHANDO PARA A ESQUERDA (o jogo espelha na batalha). ataques: alvo 'um' ou 'todos'.",
+  "fiapo_nevoa": {
+    "nome": "Fiapo de Névoa",
+    "sprite": "res://assets/sprites/inimigos/fiapo_nevoa.png",
+    "vida": 30,
+    "ataque": 7,
+    "defesa": 2,
+    "magia": 3,
+    "velocidade": 8,
+    "fraquezas": [
+      "fogo",
+      "luz"
+    ],
+    "resistencias": [
+      "gelo"
+    ],
+    "ataques": [
+      {
+        "nome": "Toque Frio",
+        "poder": 1.0,
+        "alvo": "um"
+      }
+    ]
+  },
+  "lobo_nevoa": {
+    "nome": "Lobo da Névoa",
+    "sprite": "res://assets/sprites/inimigos/lobo_nevoa.png",
+    "vida": 90,
+    "ataque": 9,
+    "defesa": 3,
+    "magia": 4,
+    "velocidade": 10,
+    "chefe": true,
+    "fraquezas": [
+      "fogo"
+    ],
+    "resistencias": [
+      "gelo"
+    ],
+    "ataques": [
+      {
+        "nome": "Mordida",
+        "poder": 1.0,
+        "alvo": "um"
+      },
+      {
+        "nome": "Uivo da Névoa",
+        "poder": 0.7,
+        "alvo": "todos"
+      }
+    ]
+  }
+}

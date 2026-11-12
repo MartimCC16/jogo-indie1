@@ -1,0 +1,35 @@
+{
+  "_comentario": "tipo: dano ou cura. custo em PM. poder multiplica o status 'magia' de quem lança. elemento combina com fraquezas/resistencias dos inimigos.",
+  "fogo": {
+    "nome": "Fogo",
+    "custo": 4,
+    "poder": 1.4,
+    "tipo": "dano",
+    "elemento": "fogo",
+    "cor": "#ff7a3a"
+  },
+  "gelo": {
+    "nome": "Gelo",
+    "custo": 4,
+    "poder": 1.3,
+    "tipo": "dano",
+    "elemento": "gelo",
+    "cor": "#8fe3ff"
+  },
+  "raio": {
+    "nome": "Raio",
+    "custo": 6,
+    "poder": 1.8,
+    "tipo": "dano",
+    "elemento": "raio",
+    "cor": "#fff16a"
+  },
+  "luz": {
+    "nome": "Luz",
+    "custo": 5,
+    "poder": 1.5,
+    "tipo": "cura",
+    "elemento": "luz",
+    "cor": "#fff6c8"
+  }
+}

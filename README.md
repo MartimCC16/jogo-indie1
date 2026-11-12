@@ -51,7 +51,11 @@ Cada quadro tem **16×16**. Colunas = quadros da caminhada (2). Linhas = direç�
 
 ### `armadura_caida.png` — 32×16 px (Sir Eco deitado na areia, antes do evento)
 
+### `fiapo_nevoa.png` — 16×16 px (inimigo de teste)
+
 ### `lobo_nevoa.png` — 32×32 px (chefe, um quadro só por enquanto)
+
+Inimigos são desenhados **olhando para a esquerda**; a batalha espelha o sprite.
 
 ## Mapas em texto (`data/mapas/*.txt`)
 
@@ -95,6 +99,31 @@ dizer "espere isto terminar". As falas dele estão em `dialogues/praia.json`.
 
 Flags usadas até agora: `conversou_tome`, `eco_despertou`.
 
+## Combate (`scenes/combate/batalha.tscn`)
+
+| Arquivo | O que tem |
+|---|---|
+| `data/herois.json` | Vida, mana, ataque, defesa, magia, velocidade e magias de cada herói. |
+| `data/inimigos.json` | Status, fraquezas, resistências e ataques de cada inimigo. |
+| `data/magias.json` | Fogo, Gelo, Raio, Luz: custo, poder, tipo (dano/cura), elemento, cor. |
+| `scripts/combate/batalha.gd` | O roteiro da batalha (turnos, menus, efeitos). |
+| `scripts/combate/formulas.gd` | As contas de dano e cura (balanceamento). |
+| `scripts/combate/barra_timing.gd` | A barra de timing do ataque. |
+| `scripts/combate/menu_batalha.gd` | O menu de opções. |
+| `scripts/combate/combatente.gd` | Os dados de um lutador durante a luta. |
+
+**Timing no ataque:** aperte AÇÃO com o cursor na faixa dourada clara
+(Perfeito ×1,5), na faixa escura ao redor (Bom ×1,0) ou fora (Fraco ×0,6).
+
+**Timing na defesa:** quando o inimigo avança, aparece um **!** — aperte AÇÃO
+nesse momento para bloquear (dano ×0,25). Apertar antes do **!** não vale.
+
+**Defender:** toma metade do dano até o próximo turno e recupera 2 PM.
+Sir Eco (`protege_aliados`) atrai os ataques para si quando defende.
+
+Para iniciar uma batalha a partir de um mapa:
+`EstadoJogo.iniciar_batalha(["lobo_nevoa"], "res://scenes/mundo/vila_ancora.tscn")`
+
 ## Autoloads (scripts globais)
 
 | Nome | Arquivo | Para quê |
@@ -128,5 +157,5 @@ Para mudar: **Projeto → Configurações do Projeto → aba Mapa de Entrada**.
 - [x] Etapa 3 — Lia andando, colisão e câmera
 - [x] Etapa 4 — Diálogo com JSON + NPC
 - [x] Etapa 5 — Evento da praia (Sir Eco desperta e passa a seguir a Lia)
-- [ ] Etapa 6 — Combate por turnos com timing
+- [x] Etapa 6 — Combate por turnos com timing
 - [ ] Etapa 7 — Chefe: Lobo da Névoa

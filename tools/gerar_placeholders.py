@@ -188,6 +188,23 @@ def gerar_armadura_caida():
     img.save(RAIZ / "assets/sprites/personagens/armadura_caida.png")
 
 
+def gerar_fiapo():
+    # Fiapo de Névoa: inimigo fraco de teste, 16x16, olhando para a esquerda.
+    img = nova(16, 16)
+    NEVOA = (200, 196, 230, 255)
+    NEVOA_ESC = (140, 134, 180, 255)
+    ret(img, 4, 2, 8, 9, NEVOA)
+    ret(img, 3, 4, 10, 6, NEVOA)
+    ret(img, 3, 10, 3, 3, NEVOA_ESC)
+    ret(img, 7, 11, 3, 4, NEVOA_ESC)
+    ret(img, 11, 10, 2, 3, NEVOA_ESC)
+    ret(img, 5, 5, 2, 2, PRETO)             # olhos
+    ret(img, 9, 5, 2, 2, PRETO)
+    px(img, 5, 5, OLHO_AZUL)
+    px(img, 9, 5, OLHO_AZUL)
+    img.save(RAIZ / "assets/sprites/inimigos/fiapo_nevoa.png")
+
+
 # ----------------------------------------------------------------- tileset --
 # tileset_vila.png: 8 colunas x 2 linhas de tiles 16x16 (128 x 32 pixels)
 #  Linha 0: 0 grama | 1 grama c/ flor | 2 caminho | 3 areia | 4 água | 5 espuma | 6 rocha | 7 árvore
@@ -253,6 +270,7 @@ if __name__ == "__main__":
     folha_personagem(desenha_aldeao, "aldeao.png")
     gerar_armadura_caida()
     gerar_lobo()
+    gerar_fiapo()
     gerar_tileset()
     gerar_icone()
     print("Placeholders gerados!")

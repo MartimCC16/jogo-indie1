@@ -1,0 +1,37 @@
+{
+  "_comentario": "Status dos heróis no combate. vida/mana = máximos. colunas/linhas = formato da folha de sprites. protege_aliados: ao Defender, atrai os ataques dos inimigos.",
+  "lia": {
+    "nome": "Lia",
+    "sprite": "res://assets/sprites/personagens/lia.png",
+    "colunas": 2,
+    "linhas": 4,
+    "vida": 45,
+    "mana": 20,
+    "ataque": 9,
+    "defesa": 4,
+    "magia": 7,
+    "velocidade": 12,
+    "magias": [
+      "fogo",
+      "raio",
+      "luz"
+    ]
+  },
+  "eco": {
+    "nome": "Sir Eco",
+    "sprite": "res://assets/sprites/personagens/sir_eco.png",
+    "colunas": 2,
+    "linhas": 4,
+    "vida": 70,
+    "mana": 12,
+    "ataque": 7,
+    "defesa": 9,
+    "magia": 5,
+    "velocidade": 6,
+    "magias": [
+      "gelo",
+      "luz"
+    ],
+    "protege_aliados": true
+  }
+}
