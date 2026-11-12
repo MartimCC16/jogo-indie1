@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/mundo/vila_ancora.gd" id="1_vila"]
+[ext_resource type="Script" path="res://scripts/mundo/mapa_de_texto.gd" id="2_mapa"]
+[ext_resource type="TileSet" path="res://assets/tiles/tileset_vila.tres" id="3_tileset"]
+[ext_resource type="Script" path="res://scripts/teste/camera_teste.gd" id="4_camera"]
+
+[node name="VilaAncora" type="Node2D"]
+script = ExtResource("1_vila")
+
+[node name="Mapa" type="Node2D" parent="."]
+script = ExtResource("2_mapa")
+arquivo_mapa = "res://data/mapas/vila_ancora.txt"
+
+[node name="Chao" type="TileMapLayer" parent="Mapa"]
+tile_set = ExtResource("3_tileset")
+
+[node name="Objetos" type="TileMapLayer" parent="Mapa"]
+tile_set = ExtResource("3_tileset")
+
+[node name="Marcadores" type="Node2D" parent="."]
+
+[node name="InicioLia" type="Marker2D" parent="Marcadores"]
+position = Vector2(264, 120)
+
+[node name="PosicaoAldeao" type="Marker2D" parent="Marcadores"]
+position = Vector2(120, 136)
+
+[node name="LocalArmadura" type="Marker2D" parent="Marcadores"]
+position = Vector2(328, 296)
+
+[node name="CameraTeste" type="Camera2D" parent="."]
+script = ExtResource("4_camera")
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="NomeRegiao" type="Label" parent="Interface"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 312.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(1, 0.95, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0.08, 0.06, 0.12, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "Vila Âncora"
+horizontal_alignment = 1

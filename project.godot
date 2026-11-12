@@ -8,7 +8,7 @@ config_version=5
 
 config/name="Névoa e Aço"
 config/description="RPG de fantasia medieval em pixel art. Reino de Vésper, Névoa do Esquecimento."
-run/main_scene="res://scenes/teste/teste_pixel.tscn"
+run/main_scene="res://scenes/mundo/vila_ancora.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.png"
 

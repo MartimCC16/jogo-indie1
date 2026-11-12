@@ -51,6 +51,18 @@ Cada quadro tem **16×16**. Colunas = quadros da caminhada (2). Linhas = direç�
 
 ### `lobo_nevoa.png` — 32×32 px (chefe, um quadro só por enquanto)
 
+## Mapas em texto (`data/mapas/*.txt`)
+
+Os mapas são desenhados com letras — cada letra é um tile de 16×16.
+A legenda está no topo de `data/mapas/vila_ancora.txt` e em `scripts/mundo/mapa_de_texto.gd`
+(constante `LEGENDA`). Depois de editar o texto, abra a cena do mapa, selecione o nó
+**Mapa** e clique em **Gerar mapa a partir do texto** no Inspetor; depois salve com Ctrl+S.
+
+Colisão: definida no `assets/tiles/tileset_vila.tres` (água, rocha, árvore, cerca e casas bloqueiam).
+
+> Ao exportar o jogo no futuro, adicione `*.txt, *.json` em
+> **Exportar → Recursos → Filtros para exportar arquivos que não são recursos**.
+
 ## Controles
 
 | Ação | Teclas |
@@ -64,7 +76,7 @@ Para mudar: **Projeto → Configurações do Projeto → aba Mapa de Entrada**.
 ## Progresso
 
 - [x] Etapa 1 — estrutura, configuração pixel art, placeholders
-- [ ] Etapa 2 — Vila Âncora (tilemap)
+- [x] Etapa 2 — Vila Âncora (tilemap gerado a partir de texto)
 - [ ] Etapa 3 — Lia andando, colisão e câmera
 - [ ] Etapa 4 — Diálogo com JSON + NPC
 - [ ] Etapa 5 — Evento da praia (Sir Eco desperta)
