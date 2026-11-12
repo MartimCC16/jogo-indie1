@@ -27,6 +27,9 @@ var ataques: Array = []        # lista de ataques (inimigos)
 var fraquezas: Array = []      # elementos que causam dano x1.5
 var resistencias: Array = []   # elementos que causam dano x0.5
 var protege_aliados := false   # ao Defender, atrai os ataques (Sir Eco)
+var chefe := false             # é um chefe?
+var furia: Dictionary = {}     # chefes: fica mais forte com pouca vida
+var furioso := false           # a fúria já foi ativada?
 
 var defendendo := false        # escolheu "Defender" neste turno?
 
@@ -57,6 +60,8 @@ static func criar(id_combatente: String, dados: Dictionary, heroi: bool) -> Comb
 	c.fraquezas = dados.get("fraquezas", [])
 	c.resistencias = dados.get("resistencias", [])
 	c.protege_aliados = dados.get("protege_aliados", false)
+	c.chefe = dados.get("chefe", false)
+	c.furia = dados.get("furia", {})
 	return c
 
 

@@ -97,7 +97,18 @@ O evento da praia está em `scripts/mundo/evento_despertar_eco.gd`. A função
 `_executar_cena()` é um **roteiro** que se lê de cima para baixo; cada `await` quer
 dizer "espere isto terminar". As falas dele estão em `dialogues/praia.json`.
 
-Flags usadas até agora: `conversou_tome`, `eco_despertou`.
+Flags usadas até agora: `conversou_tome`, `eco_despertou`, `luta_lobo_iniciada`, `lobo_derrotado`.
+
+**Roteiro do prólogo:** falar com o Tomé → examinar a armadura na praia → Sir Eco
+desperta → o Lobo da Névoa aparece → batalha de chefe com tutorial
+(`dialogues/tutorial.json`) → volta à vila → conversa final (`pos_lobo`) → tela
+"Fim do Prólogo" → exploração livre.
+
+NPCs mudam de fala conforme a história pelo campo **Dialogos Por Flag** no Inspetor
+(ex.: `{"eco_despertou": "tome_eco", "lobo_derrotado": "tome_pos_lobo"}`).
+
+**Fúria dos chefes:** em `data/inimigos.json`, o bloco `"furia"` faz o chefe ficar
+mais forte quando a vida cai abaixo do limite.
 
 ## Combate (`scenes/combate/batalha.tscn`)
 
@@ -158,4 +169,4 @@ Para mudar: **Projeto → Configurações do Projeto → aba Mapa de Entrada**.
 - [x] Etapa 4 — Diálogo com JSON + NPC
 - [x] Etapa 5 — Evento da praia (Sir Eco desperta e passa a seguir a Lia)
 - [x] Etapa 6 — Combate por turnos com timing
-- [ ] Etapa 7 — Chefe: Lobo da Névoa
+- [x] Etapa 7 — Chefe: Lobo da Névoa (com tutorial) e final do prólogo

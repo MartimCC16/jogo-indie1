@@ -49,5 +49,15 @@
       "quem": "tome",
       "texto": "E ainda é educada! Lia, minha filha, em que confusão você se meteu agora?"
     }
+  ],
+  "tome_pos_lobo": [
+    {
+      "quem": "tome",
+      "texto": "Eu ouvi a luta lá da vila! Vocês dois derrotaram aquela fera de névoa?"
+    },
+    {
+      "quem": "tome",
+      "texto": "Hah! A Vila Âncora está em boas mãos... e em boas manoplas!"
+    }
   ]
 }

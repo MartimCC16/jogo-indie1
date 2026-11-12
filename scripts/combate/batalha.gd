@@ -12,7 +12,8 @@
 #   5. _finalizar(): vitória ou derrota.
 #
 # Como escolher o inimigo:
-#   - Pelo código do mapa:  EstadoJogo.iniciar_batalha(["lobo_nevoa"], "res://...tscn")
+#   - Pelo código do mapa:  EstadoJogo.iniciar_batalha(["lobo_nevoa"], "res://...tscn", true)
+#     (o "true" no final liga as dicas de TUTORIAL de dialogues/tutorial.json)
 #   - Testando direto (F6 nesta cena): usa "Inimigos Padrao" do Inspetor.
 #
 # Os números (vida, ataque, magias...) ficam em data/*.json.
@@ -28,6 +29,7 @@ extends Node2D
 const ARQ_HEROIS := "res://data/herois.json"
 const ARQ_INIMIGOS := "res://data/inimigos.json"
 const ARQ_MAGIAS := "res://data/magias.json"
+const ARQ_TUTORIAL := "res://dialogues/tutorial.json"
 
 # Onde cada lutador fica na tela (320x180).
 const POSICOES_HEROIS := [Vector2(236, 58), Vector2(270, 92)]
@@ -52,6 +54,9 @@ var inimigos: Array[Combatente] = []
 var magias: Dictionary = {}
 
 var _acabou := false
+var _tutorial_ativo := false
+var _textos_tutorial: Dictionary = {}
+var _tutoriais_vistos: Dictionary = {}
 var _venceu := false
 
 @onready var combatentes_no: Node2D = $Combatentes
@@ -70,7 +75,12 @@ func _ready() -> void:
 	if inimigos.is_empty() or herois.is_empty():
 		_texto("Erro: confira data/herois.json e data/inimigos.json")
 		return
+	_tutorial_ativo = EstadoJogo.proxima_batalha.get("tutorial", false)
+	if _tutorial_ativo:
+		_textos_tutorial = Dados.carregar_json(ARQ_TUTORIAL)
 	var titulo := "%s aparece!" % inimigos[0].nome if inimigos.size() == 1 else "Inimigos aparecem!"
+	if inimigos[0].chefe:
+		titulo = "CHEFE: %s!" % inimigos[0].nome
 	await _mensagem(titulo, 1.2)
 	_rodar_batalha()
 
@@ -175,6 +185,9 @@ func _verificar_fim() -> void:
 
 func _turno_heroi(c: Combatente) -> void:
 	c.defendendo = false  # a defesa só vale até o próximo turno
+	# Dicas de tutorial (só aparecem uma vez, e só se o tutorial estiver ligado).
+	await _tutorial("tutorial_inicio")
+	await _tutorial("tutorial_" + c.id)
 	c.status.destacar(true)
 	await _deslocar(c.sprite, c.posicao_base + Vector2(-10, 0), 0.15)  # dá um passo à frente
 	_texto("Vez de %s" % c.nome)
@@ -288,6 +301,8 @@ func _turno_inimigo(c: Combatente) -> void:
 	if alvos.is_empty():
 		return
 
+	await _verificar_furia(c)
+	await _tutorial("tutorial_defesa")
 	await _mensagem("%s usa %s!" % [c.nome, ataque.get("nome", "Ataque")], 0.8)
 	_texto("Aperte AÇÃO quando aparecer o  !")
 	var bloqueou := await _investida_com_defesa(c, alvos[0])
@@ -300,6 +315,20 @@ func _turno_inimigo(c: Combatente) -> void:
 	if bloqueou:
 		_numero("Bloqueou!", alvos[0].sprite.position + Vector2(0, -14), COR_BLOQUEIO)
 	await _espera(0.8)
+
+
+## Chefes com "furia" no JSON ficam mais fortes quando a vida cai.
+func _verificar_furia(c: Combatente) -> void:
+	if c.furioso or c.furia.is_empty():
+		return
+	if float(c.vida) / c.vida_max > float(c.furia.get("limite", 0.5)):
+		return
+	c.furioso = true
+	c.ataque += int(c.furia.get("ataque_extra", 0))
+	# Fica avermelhado para mostrar a fúria.
+	create_tween().tween_property(c.sprite, "modulate", Color(1, 0.65, 0.65), 0.4)
+	await _mensagem(c.furia.get("mensagem", "%s ficou furioso!" % c.nome), 1.4)
+	await _tutorial("tutorial_furia")
 
 
 ## Quem o inimigo vai atacar.
@@ -344,6 +373,8 @@ func _esperar_aperto(antes: float, janela: float) -> bool:
 	var tempo := 0.0
 	var resultado := false
 	alerta.hide()
+	# Ignora um aperto que tenha acontecido neste mesmo quadro (ex.: fechar diálogo).
+	await get_tree().process_frame
 	while tempo < antes + janela:
 		await get_tree().process_frame
 		tempo += get_process_delta_time()
@@ -362,20 +393,37 @@ func _esperar_aperto(antes: float, janela: float) -> bool:
 
 func _finalizar() -> void:
 	menu.limpar()
-	if _venceu:
-		await _mensagem("Vitória!", 1.5)
-	else:
-		await _mensagem("Lia e Sir Eco caíram...", 1.5)
+	# Guarda uma cópia da configuração (para "tentar de novo").
+	var config: Dictionary = EstadoJogo.proxima_batalha.duplicate()
+	var retorno: String = config.get("cena_retorno", "")
 
-	var retorno: String = EstadoJogo.proxima_batalha.get("cena_retorno", "")
-	EstadoJogo.registrar_fim_batalha(_venceu)
+	if not _venceu:
+		await _mensagem("Lia e Sir Eco caíram...", 1.5)
+		_texto("Aperte AÇÃO para tentar de novo")
+		await _esperar_acao()
+		if retorno != "":
+			EstadoJogo.repetir_batalha(config)
+		else:
+			get_tree().reload_current_scene()
+		return
+
+	await _mensagem("Vitória!", 1.5)
+	EstadoJogo.registrar_fim_batalha(true)
 	if retorno != "":
-		get_tree().change_scene_to_file(retorno)
+		EstadoJogo.trocar_cena(retorno)
 	else:
 		# Rodando a cena direto (F6): permite lutar de novo.
 		_texto("Aperte AÇÃO para lutar de novo")
 		await _esperar_acao()
 		get_tree().reload_current_scene()
+
+
+## Mostra um diálogo de tutorial (uma vez só por batalha).
+func _tutorial(id: String) -> void:
+	if not _tutorial_ativo or _tutoriais_vistos.has(id) or not _textos_tutorial.has(id):
+		return
+	_tutoriais_vistos[id] = true
+	await Dialogo.iniciar(ARQ_TUTORIAL, id)
 
 
 # ===========================================================================

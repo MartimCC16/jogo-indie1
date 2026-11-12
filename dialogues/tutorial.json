@@ -1,0 +1,47 @@
+{
+  "_comentario": "Dicas mostradas na batalha quando o tutorial está ligado. tutorial_<id do herói> aparece no primeiro turno daquele herói.",
+  "tutorial_inicio": [
+    {
+      "quem": "eco",
+      "texto": "Lia, esse lobo é feito de névoa! Vamos lutar juntos."
+    },
+    {
+      "quem": "eco",
+      "texto": "No seu turno, escolha Atacar, Magia ou Defender com as setas e confirme com Z."
+    },
+    {
+      "quem": "eco",
+      "texto": "Ao atacar, surge uma barra. Aperte Z quando o cursor passar pela faixa dourada!"
+    },
+    {
+      "quem": "eco",
+      "texto": "Quanto mais perto do dourado claro, mais forte o golpe. Esse é o segredo da espada."
+    }
+  ],
+  "tutorial_eco": [
+    {
+      "quem": "eco",
+      "texto": "Minha vez. Se eu escolher Defender, atraio os ataques e protejo você."
+    },
+    {
+      "quem": "lia",
+      "texto": "E a minha Lanterna lança magias! Esse lobo parece ter medo de fogo..."
+    }
+  ],
+  "tutorial_defesa": [
+    {
+      "quem": "eco",
+      "texto": "Cuidado, ele vai atacar! Quando surgir um \"!\" sobre quem ele mira, aperte Z."
+    },
+    {
+      "quem": "eco",
+      "texto": "No momento certo, o golpe é bloqueado. Mas se apertar antes do \"!\", falha!"
+    }
+  ],
+  "tutorial_furia": [
+    {
+      "quem": "lia",
+      "texto": "Ele ficou mais forte! Se precisar, use Luz para curar quem estiver ferido."
+    }
+  ]
+}

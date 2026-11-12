@@ -67,5 +67,57 @@
       "quem": "eco",
       "texto": "Meu escudo é seu. Ninguém vai te ferir enquanto eu estiver de pé."
     }
+  ],
+  "lobo_aparece": [
+    {
+      "quem": "narrador",
+      "texto": "A névoa se agita. Uma silhueta enorme surge entre as dunas..."
+    },
+    {
+      "quem": "lia",
+      "texto": "Um lobo... feito de névoa?! Os olhos dele brilham como brasas!"
+    },
+    {
+      "quem": "eco",
+      "texto": "Ele veio atrás da luz da sua lanterna. Lia, fique atrás do meu escudo!"
+    },
+    {
+      "quem": "lia",
+      "texto": "Atrás nada! Nós lutamos juntos, Sir Eco!"
+    }
+  ],
+  "pos_lobo": [
+    {
+      "quem": "narrador",
+      "texto": "O Lobo da Névoa se desfaz em fiapos cinzentos, que somem com a brisa do mar."
+    },
+    {
+      "quem": "lia",
+      "texto": "Conseguimos! Você está bem, Sir Eco?"
+    },
+    {
+      "quem": "eco",
+      "texto": "Estou... Lia, quando o lobo sumiu, eu vi algo. Uma lembrança."
+    },
+    {
+      "quem": "eco",
+      "texto": "Uma torre alta no meio da floresta. E uma luz azul que se apagava."
+    },
+    {
+      "quem": "lia",
+      "texto": "A Primeira Torre de Luz! Fica além da Floresta Cinzenta, ao norte."
+    },
+    {
+      "quem": "lia",
+      "texto": "Se reacendermos as torres, a névoa vai embora... e talvez suas memórias voltem."
+    },
+    {
+      "quem": "eco",
+      "texto": "Então está decidido. Para onde a sua lanterna for, o meu escudo irá."
+    },
+    {
+      "quem": "narrador",
+      "texto": "E assim começa a jornada de Lia e Sir Eco pelo Reino de Vésper..."
+    }
   ]
 }

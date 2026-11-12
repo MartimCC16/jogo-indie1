@@ -26,6 +26,48 @@ func tem_flag(nome: String) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# TROCA DE CENA COM ESCURECIMENTO (fade)
+# ---------------------------------------------------------------------------
+
+## Onde o jogador deve aparecer ao voltar para um mapa (null = no início).
+var posicao_retorno = null
+
+var _cortina: ColorRect      # retângulo preto que cobre a tela
+var _trocando := false
+
+
+func _ready() -> void:
+	# Cria a "cortina" preta uma vez só. Como este nó é um autoload, ela
+	# continua existindo mesmo quando a cena muda.
+	var camada := CanvasLayer.new()
+	camada.layer = 50  # por cima de tudo
+	_cortina = ColorRect.new()
+	_cortina.color = Color(0, 0, 0, 0)
+	_cortina.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_cortina.set_anchors_preset(Control.PRESET_FULL_RECT)
+	camada.add_child(_cortina)
+	add_child(camada)
+
+
+## Escurece a tela, troca de cena e clareia de novo.
+func trocar_cena(caminho: String) -> void:
+	if _trocando:
+		return
+	_trocando = true
+	var tween := create_tween()
+	tween.tween_property(_cortina, "color:a", 1.0, 0.4)
+	await tween.finished
+	get_tree().change_scene_to_file(caminho)
+	# A troca acontece no próximo quadro; esperamos a cena nova aparecer.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	tween = create_tween()
+	tween.tween_property(_cortina, "color:a", 0.0, 0.4)
+	await tween.finished
+	_trocando = false
+
+
+# ---------------------------------------------------------------------------
 # BATALHAS
 # ---------------------------------------------------------------------------
 
@@ -40,12 +82,18 @@ const CENA_BATALHA := "res://scenes/combate/batalha.tscn"
 ## Troca para a tela de batalha.
 ##   inimigos: lista de ids de data/inimigos.json, ex.: ["lobo_nevoa"]
 ##   cena_retorno: cena para onde voltar no final (ex.: o mapa atual)
-func iniciar_batalha(inimigos: Array, cena_retorno := "") -> void:
-	proxima_batalha = {"inimigos": inimigos, "cena_retorno": cena_retorno}
-	get_tree().change_scene_to_file(CENA_BATALHA)
+##   tutorial: true para mostrar as dicas de tutorial (dialogues/tutorial.json)
+func iniciar_batalha(inimigos: Array, cena_retorno := "", tutorial := false) -> void:
+	repetir_batalha({"inimigos": inimigos, "cena_retorno": cena_retorno, "tutorial": tutorial})
 
 
-## Chamado pela batalha quando ela termina.
+## Começa uma batalha com uma configuração pronta (usado para "tentar de novo").
+func repetir_batalha(config: Dictionary) -> void:
+	proxima_batalha = config
+	trocar_cena(CENA_BATALHA)
+
+
+## Chamado pela batalha quando ela termina com vitória.
 func registrar_fim_batalha(venceu: bool) -> void:
 	venceu_ultima_batalha = venceu
 	proxima_batalha = {}

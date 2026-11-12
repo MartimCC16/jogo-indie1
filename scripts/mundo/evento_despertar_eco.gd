@@ -7,7 +7,10 @@
 #   2. a lanterna brilha, a tela pisca e a armadura treme;
 #   3. a armadura some e Sir Eco aparece de pé;
 #   4. os dois conversam (diálogo "praia_despertar");
-#   5. Sir Eco passa a seguir a Lia, e a flag "eco_despertou" é marcada.
+#   5. a flag "eco_despertou" é marcada;
+#   6. o LOBO DA NÉVOA surge da névoa (diálogo "lobo_aparece");
+#   7. começa a batalha contra o chefe, com tutorial. Ao vencer, o jogo volta
+#      para a vila, e o vila_ancora.gd mostra o final do prólogo.
 #
 # As falas estão em dialogues/praia.json. Para mudar a ORDEM das coisas,
 # mexa na função _executar_cena() abaixo: ela lê de cima para baixo como
@@ -18,6 +21,7 @@ extends StaticBody2D
 ## Nome da flag marcada quando o evento termina.
 const FLAG := "eco_despertou"
 const ARQUIVO_DIALOGOS := "res://dialogues/praia.json"
+const TEXTURA_LOBO := preload("res://assets/sprites/inimigos/lobo_nevoa.png")
 
 ## O nó do Sir Eco (seguidor) que vai aparecer de pé. Escolha no Inspetor.
 @export var sir_eco: Seguidor
@@ -59,17 +63,40 @@ func _executar_cena(lia: Jogador) -> void:
 
 	await Dialogo.iniciar(ARQUIVO_DIALOGOS, "praia_despertar")
 
-	# Fim: Eco entra no grupo e a Lia pode andar de novo.
 	EstadoJogo.marcar_flag(FLAG)
-	sir_eco.seguir(lia)
-	lia.pode_mover = true
-	# A armadura caída não é mais necessária: remove este nó do mapa.
-	queue_free()
+
+	# O uivo... e o Lobo da Névoa aparece!
+	await _lobo_aparece(lia)
+
+	# Começa a batalha contra o chefe (com tutorial).
+	# Ao voltar, a Lia reaparece neste mesmo lugar da praia.
+	EstadoJogo.marcar_flag("luta_lobo_iniciada")
+	EstadoJogo.posicao_retorno = lia.global_position
+	EstadoJogo.iniciar_batalha(["lobo_nevoa"], get_tree().current_scene.scene_file_path, true)
 
 
 # ---------------------------------------------------------------------------
 # Efeitos usados no roteiro (dá para reaproveitar em outros eventos).
 # ---------------------------------------------------------------------------
+
+## O lobo surge à esquerda, saindo da névoa (aparece aos poucos).
+func _lobo_aparece(lia: Jogador) -> void:
+	var lobo := Sprite2D.new()
+	lobo.texture = TEXTURA_LOBO
+	lobo.flip_h = true  # olhando para a direita, na direção da Lia
+	lobo.modulate.a = 0.0
+	get_parent().add_child(lobo)
+	lobo.global_position = global_position + Vector2(-90, -8)
+
+	var tween := create_tween()
+	tween.tween_property(lobo, "modulate:a", 1.0, 1.0)
+	tween.parallel().tween_property(lobo, "global_position", global_position + Vector2(-56, -8), 1.0)
+	await tween.finished
+
+	lia.olhar_para(lobo.global_position)
+	sir_eco.olhar_para(lobo.global_position)
+	await Dialogo.iniciar(ARQUIVO_DIALOGOS, "lobo_aparece")
+
 
 ## Espera alguns segundos.
 func espera(segundos: float) -> void:

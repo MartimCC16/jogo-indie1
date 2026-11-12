@@ -37,8 +37,10 @@ position = Vector2(104, 130)
 id_npc = "tome"
 dialogo_inicial = "tome_inicio"
 dialogo_repetido = "tome_repetido"
-flag_alternativa = "eco_despertou"
-dialogo_alternativo = "tome_eco"
+dialogos_por_flag = {
+"eco_despertou": "tome_eco",
+"lobo_derrotado": "tome_pos_lobo"
+}
 
 [node name="ArmaduraCaida" parent="Entidades" instance=ExtResource("7_armadura")]
 position = Vector2(328, 296)

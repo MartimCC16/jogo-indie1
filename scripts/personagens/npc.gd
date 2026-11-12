@@ -20,10 +20,10 @@ extends StaticBody2D
 @export var dialogo_inicial := ""
 ## Conversa das outras vezes (se ficar vazio, repete a inicial).
 @export var dialogo_repetido := ""
-## Se esta flag já estiver marcada, usa o "dialogo_alternativo" no lugar
-## dos outros. Ex.: depois que Sir Eco desperta, o Tomé fala outra coisa.
-@export var flag_alternativa := ""
-@export var dialogo_alternativo := ""
+## Falas que mudam conforme a HISTÓRIA avança: { "flag": "id do diálogo" }.
+## Se várias flags estiverem marcadas, vale a ÚLTIMA da lista.
+## Ex.: { "eco_despertou": "tome_eco", "lobo_derrotado": "tome_pos_lobo" }
+@export var dialogos_por_flag: Dictionary = {}
 ## Para onde ele olha quando ninguém está conversando (0 baixo, 1 cima, 2 esq., 3 dir.).
 @export_range(0, 3) var direcao_padrao := 0
 
@@ -44,8 +44,9 @@ func interagir(jogador: Node2D) -> void:
 	var conversa := dialogo_inicial
 	if dialogo_repetido != "" and EstadoJogo.tem_flag(flag):
 		conversa = dialogo_repetido
-	if flag_alternativa != "" and EstadoJogo.tem_flag(flag_alternativa):
-		conversa = dialogo_alternativo
+	for flag_historia in dialogos_por_flag:
+		if EstadoJogo.tem_flag(flag_historia):
+			conversa = dialogos_por_flag[flag_historia]
 
 	await Dialogo.iniciar(arquivo_dialogos, conversa)
 

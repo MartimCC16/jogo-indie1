@@ -1,5 +1,5 @@
 {
-  "_comentario": "Inimigos. Desenhe o sprite OLHANDO PARA A ESQUERDA (o jogo espelha na batalha). ataques: alvo 'um' ou 'todos'.",
+  "_comentario": "Inimigos. Desenhe o sprite OLHANDO PARA A ESQUERDA (o jogo espelha na batalha). ataques: alvo 'um' ou 'todos'. furia (chefes): quando a vida cair abaixo de 'limite' (0.5 = 50%), ganha 'ataque_extra'.",
   "fiapo_nevoa": {
     "nome": "Fiapo de Névoa",
     "sprite": "res://assets/sprites/inimigos/fiapo_nevoa.png",
@@ -49,6 +49,11 @@
         "poder": 0.7,
         "alvo": "todos"
       }
-    ]
+    ],
+    "furia": {
+      "limite": 0.5,
+      "ataque_extra": 3,
+      "mensagem": "O Lobo da Névoa uiva furioso! Seu ataque aumentou!"
+    }
   }
 }
