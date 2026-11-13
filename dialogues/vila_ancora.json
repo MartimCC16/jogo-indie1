@@ -59,5 +59,11 @@
       "quem": "tome",
       "texto": "Hah! A Vila Âncora está em boas mãos... e em boas manoplas!"
     }
+  ],
+  "vila_saida_bloqueada": [
+    {
+      "quem": "lia",
+      "texto": "A Floresta Cinzenta fica por aqui... Mas antes, o Tomé falou de algo estranho na praia."
+    }
   ]
 }

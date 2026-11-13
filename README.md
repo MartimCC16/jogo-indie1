@@ -78,6 +78,32 @@ Cena: `scenes/mundo/arvore.tscn` — escolha a **Estacao** no Inspetor. Só o tr
 
 Inimigos são desenhados **olhando para a esquerda**; a batalha espelha o sprite.
 
+## Regiões e mapas
+
+| Região | Cena | Mapa em texto | Tileset |
+|---|---|---|---|
+| Vila Âncora | `scenes/mundo/vila_ancora.tscn` | `data/mapas/vila_ancora.txt` | `tileset_vila` |
+| Floresta Cinzenta (entrada) | `scenes/mundo/floresta/floresta_entrada.tscn` | `data/mapas/floresta_entrada.txt` | `tileset_floresta` |
+
+**Peças para montar qualquer mapa** (arraste para a cena e ajuste no Inspetor):
+
+| Peça | Para quê |
+|---|---|
+| `scenes/mundo/saida.tscn` | Leva para outro mapa (Cena Destino + Entrada Destino). Pode ser trancada por uma flag. |
+| `scenes/mundo/clima.tscn` | Cor do ambiente, **Névoa do Esquecimento** (se abre em volta da Lanterna) e partículas (vagalumes, folhas, neve, brasas, chuva). |
+| `scenes/mundo/inimigo_mapa.tscn` | Inimigo flutuando no mapa; ao tocar, começa a batalha. Some depois de vencido. |
+| `scenes/mundo/arvore.tscn` | Árvore grande (criada sozinha pelas letras `A` e `T`). |
+
+**Entradas:** um `Marker2D` dentro de `Marcadores` com o nome usado na saída do outro mapa
+(ex.: a saída norte da vila leva à entrada `sul` da floresta).
+
+**Script do mapa:** `extends MapaBase` (`scripts/mundo/mapa_base.gd`) já posiciona a Lia,
+limita a câmera, traz o Sir Eco e mostra o nome da região.
+
+**Criar um mapa novo:** duplique `floresta_entrada.tscn`, troque o arquivo do mapa, o
+tileset e a imagem das árvores no nó **Mapa**, ajuste o **Clima** e clique em
+**Gerar mapa a partir do texto**.
+
 ## Mapas em texto (`data/mapas/*.txt`)
 
 Os mapas são desenhados com letras — cada letra é um tile de 16×16.

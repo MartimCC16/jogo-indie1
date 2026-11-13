@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/mundo/clima.gd" id="1_clima"]
+[ext_resource type="Shader" path="res://assets/shaders/nevoa.gdshader" id="2_nevoa"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_nevoa"]
+frequency = 0.03
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nevoa"]
+width = 128
+height = 128
+seamless = true
+noise = SubResource("FastNoiseLite_nevoa")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nevoa"]
+shader = ExtResource("2_nevoa")
+shader_parameter/ruido = SubResource("NoiseTexture2D_nevoa")
+
+[node name="Clima" type="Node"]
+script = ExtResource("1_clima")
+
+[node name="Ambiente" type="CanvasModulate" parent="."]
+
+[node name="Camada" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="Nevoa" type="ColorRect" parent="Camada"]
+visible = false
+material = SubResource("ShaderMaterial_nevoa")
+offset_right = 320.0
+offset_bottom = 180.0
+mouse_filter = 2
+
+[node name="Particulas" type="CPUParticles2D" parent="Camada"]
+emitting = false

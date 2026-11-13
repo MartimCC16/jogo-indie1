@@ -1,0 +1,96 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/mundo/floresta/floresta_entrada.gd" id="1_mapa_script"]
+[ext_resource type="Script" path="res://scripts/mundo/mapa_de_texto.gd" id="2_mapa"]
+[ext_resource type="TileSet" path="res://assets/tiles/tileset_floresta.tres" id="3_tileset"]
+[ext_resource type="Texture2D" path="res://assets/sprites/cenario/arvore_floresta.png" id="4_arvores"]
+[ext_resource type="PackedScene" path="res://scenes/personagens/lia.tscn" id="5_lia"]
+[ext_resource type="PackedScene" path="res://scenes/personagens/sir_eco.tscn" id="6_eco"]
+[ext_resource type="PackedScene" path="res://scenes/mundo/inimigo_mapa.tscn" id="7_inimigo"]
+[ext_resource type="PackedScene" path="res://scenes/mundo/saida.tscn" id="8_saida"]
+[ext_resource type="PackedScene" path="res://scenes/mundo/clima.tscn" id="9_clima"]
+
+[node name="FlorestaEntrada" type="Node2D"]
+script = ExtResource("1_mapa_script")
+nome_da_regiao = "Floresta Cinzenta"
+
+[node name="Mapa" type="Node2D" parent="."]
+script = ExtResource("2_mapa")
+arquivo_mapa = "res://data/mapas/floresta_entrada.txt"
+textura_das_arvores = ExtResource("4_arvores")
+variar_arvores = true
+
+[node name="Chao" type="TileMapLayer" parent="Mapa"]
+tile_set = ExtResource("3_tileset")
+
+[node name="Objetos" type="TileMapLayer" parent="Mapa"]
+tile_set = ExtResource("3_tileset")
+
+[node name="Marcadores" type="Node2D" parent="."]
+
+[node name="InicioLia" type="Marker2D" parent="Marcadores"]
+position = Vector2(320, 424)
+
+[node name="sul" type="Marker2D" parent="Marcadores"]
+position = Vector2(320, 424)
+
+[node name="Entidades" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Arvores" type="Node2D" parent="Entidades"]
+y_sort_enabled = true
+
+[node name="Lia" parent="Entidades" instance=ExtResource("5_lia")]
+position = Vector2(320, 424)
+
+[node name="SirEco" parent="Entidades" instance=ExtResource("6_eco")]
+position = Vector2(320, 440)
+
+[node name="Fiapo1" parent="Entidades" instance=ExtResource("7_inimigo")]
+position = Vector2(184, 120)
+id_unico = "floresta_fiapo_1"
+
+[node name="Fiapo2" parent="Entidades" instance=ExtResource("7_inimigo")]
+position = Vector2(424, 200)
+id_unico = "floresta_fiapo_2"
+
+[node name="Fiapo3" parent="Entidades" instance=ExtResource("7_inimigo")]
+position = Vector2(520, 312)
+id_unico = "floresta_fiapo_3"
+
+[node name="Saidas" type="Node2D" parent="."]
+
+[node name="SaidaSul" parent="Saidas" instance=ExtResource("8_saida")]
+position = Vector2(320, 476)
+cena_destino = "res://scenes/mundo/vila_ancora.tscn"
+entrada_destino = "norte"
+olhar_ao_chegar = 0
+tamanho = Vector2(32, 8)
+
+[node name="PortalNorte" parent="Saidas" instance=ExtResource("8_saida")]
+position = Vector2(320, 100)
+flag_necessaria = "floresta_profunda_aberta"
+arquivo_dialogo = "res://dialogues/floresta.json"
+dialogo_bloqueado = "portal_fechado"
+tamanho = Vector2(32, 6)
+
+[node name="Clima" parent="." instance=ExtResource("9_clima")]
+cor_ambiente = Color(0.86, 0.88, 0.96, 1)
+particulas = 1
+nevoa_ativa = true
+cor_nevoa = Color(0.84, 0.8, 0.94, 0.82)
+flag_que_dissipa_nevoa = "torre_aurora_acesa"
+
+[node name="Interface" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="NomeRegiao" type="Label" parent="Interface"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 312.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(1, 0.95, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0.08, 0.06, 0.12, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1

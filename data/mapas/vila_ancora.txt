@@ -17,9 +17,9 @@
 ; scenes/mundo/vila_ancora.tscn, selecione o nó "Mapa" e clique no botão
 ; "Gerar mapa a partir do texto" no Inspetor. Depois salve a cena (Ctrl+S).
 ; =====================================================================
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTT.=.TTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTT.=.TTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTT.=.TTTTTTTTTTTTTTTTTTTTTT
 TT.....,........=.....,.......A...,...TT
 T..^^^^^...,....=..........^^^^^......TT
 T..^^^^^....A...=.....R....^^^^^...,...T

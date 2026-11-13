@@ -1,0 +1,35 @@
+{
+  "_comentario": "Falas da Floresta Cinzenta.",
+  "floresta_chegada": [
+    {
+      "quem": "lia",
+      "texto": "Que frio... A névoa aqui é tão densa que mal vejo as árvores."
+    },
+    {
+      "quem": "eco",
+      "texto": "Fique perto de mim. Repare: onde a luz da sua Lanterna toca, a névoa se abre."
+    },
+    {
+      "quem": "lia",
+      "texto": "E as cores voltam! Esta floresta deve ser linda sem a névoa..."
+    },
+    {
+      "quem": "eco",
+      "texto": "A Torre da Aurora fica depois das ruínas, ao norte. Cuidado com os fiapos de névoa."
+    }
+  ],
+  "portal_fechado": [
+    {
+      "quem": "narrador",
+      "texto": "O portal de pedra está tomado por uma névoa espessa e fria."
+    },
+    {
+      "quem": "lia",
+      "texto": "A Lanterna não é forte o bastante para abrir isto... ainda."
+    },
+    {
+      "quem": "narrador",
+      "texto": "(O caminho para a Torre da Aurora continua na próxima etapa!)"
+    }
+  ]
+}

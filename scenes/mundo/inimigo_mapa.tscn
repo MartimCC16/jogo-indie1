@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/mundo/inimigo_mapa.gd" id="1_inimigo"]
+[ext_resource type="Texture2D" path="res://assets/sprites/inimigos/fiapo_nevoa.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_toque"]
+size = Vector2(12, 12)
+
+[node name="InimigoMapa" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_inimigo")
+textura = ExtResource("2_tex")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+
+[node name="Forma" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_toque")

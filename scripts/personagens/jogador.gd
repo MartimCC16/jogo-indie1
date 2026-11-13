@@ -39,6 +39,11 @@ const DISTANCIA_SENSOR := 10.0
 const AJUSTE_SENSOR := Vector2(0, 4)
 
 
+func _ready() -> void:
+	# Grupo = uma "etiqueta". Outros scripts acham a Lia procurando por ela.
+	add_to_group("jogador")
+
+
 # _physics_process roda em passos fixos (60x por segundo), ideal para movimento.
 func _physics_process(delta: float) -> void:
 	var entrada := Vector2.ZERO

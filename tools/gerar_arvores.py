@@ -131,7 +131,7 @@ FOLHA = [(1, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2), (3, 2), (1, 3),
 FOLHA_SOMBRA = [(3, 3), (2, 4), (1, 4)]
 
 
-def copa(img, pal, rnd, flores=False):
+def copa(img, pal, rnd, flores=False, cores_flores=((255, 222, 238), (236, 140, 186))):
     """Copa feita de tufos; cada tufo é coberto de folhinhas."""
     sombra, meio, luz, brilho = pal
     for (tx, ty, r) in sorted(TUFOS, key=lambda c: c[1]):  # de trás (cima) para frente
@@ -162,9 +162,9 @@ def copa(img, pal, rnd, flores=False):
             tx, ty, r = rnd.choice(TUFOS)
             x = tx + rnd.randint(-r + 3, r - 3)
             y = ty + rnd.randint(-r + 3, r - 3)
-            pinta(img, x, y, (255, 222, 238))
-            pinta(img, x + 1, y, (236, 140, 186))
-            pinta(img, x, y + 1, (236, 140, 186))
+            pinta(img, x, y, cores_flores[0])
+            pinta(img, x + 1, y, cores_flores[1])
+            pinta(img, x, y + 1, cores_flores[1])
 
 
 def contorno(img, fator=0.4):
@@ -209,11 +209,69 @@ def quadro(estacao, semente=7):
     return img
 
 
-if __name__ == "__main__":
+# ---------------------------------------------------------------------------
+# FLORESTA CINZENTA: árvores antigas, com musgo no tronco e cogumelos.
+# arvore_floresta.png: 4 quadros = 4 VARIAÇÕES (não estações).
+# ---------------------------------------------------------------------------
+TRONCO_FLORESTA = [(70, 44, 34), (118, 78, 52), (164, 114, 72), (204, 156, 100)]
+MUSGO = [(46, 120, 60), (90, 176, 80)]
+VARIACOES_FLORESTA = [
+    {"folhas": [(20, 84, 56), (31, 120, 72), (52, 166, 96), (130, 220, 140)]},
+    {"folhas": [(16, 86, 92), (28, 128, 124), (63, 184, 170), (150, 236, 214)], "cogumelos": True},
+    {"folhas": [(26, 96, 48), (46, 140, 58), (92, 190, 80), (176, 232, 120)], "cogumelos": True},
+    {"folhas": [(30, 90, 70), (46, 130, 90), (80, 176, 110), (160, 226, 160)],
+     "flores": ((255, 168, 214), (222, 88, 160))},
+]
+
+
+def musgo_no_tronco(img, rnd):
+    for _ in range(14):
+        x = CX + rnd.randint(-4, 0)
+        y = rnd.randint(TOPO_TRONCO + 4, BASE_Y - 6)
+        pinta(img, x, y, MUSGO[rnd.randint(0, 1)])
+        pinta(img, x, y + 1, MUSGO[0])
+
+
+def cogumelos(img):
+    """Cogumelinhos laranja de bolinhas brancas nas raízes."""
+    CHAPEU, CHAPEU_ESC, PE = (255, 138, 61), (206, 84, 40), (250, 236, 210)
+    for (x, y) in ((CX - 10, BASE_Y - 1), (CX + 9, BASE_Y - 2), (CX + 12, BASE_Y)):
+        pinta(img, x, y, PE)
+        pinta(img, x, y - 1, PE)
+        for dx in range(-2, 3):
+            pinta(img, x + dx, y - 2, CHAPEU if abs(dx) < 2 else CHAPEU_ESC)
+        for dx in range(-1, 2):
+            pinta(img, x + dx, y - 3, CHAPEU)
+        pinta(img, x - 1, y - 3, (255, 245, 230))
+        pinta(img, x + 1, y - 2, (255, 245, 230))
+
+
+def quadro_floresta(cfg, semente):
+    rnd = random.Random(semente)
+    img = Image.new("RGBA", (L, A), (0, 0, 0, 0))
+    tronco(img, TRONCO_FLORESTA, rnd)
+    musgo_no_tronco(img, rnd)
+    if "flores" in cfg:
+        copa(img, cfg["folhas"], rnd, flores=True, cores_flores=cfg["flores"])
+    else:
+        copa(img, cfg["folhas"], rnd)
+    if cfg.get("cogumelos"):
+        cogumelos(img)
+    contorno(img)
+    sombra_no_chao(img)
+    return img
+
+
+def gerar_folha(quadros, nome):
     folha = Image.new("RGBA", (L * 4, A), (0, 0, 0, 0))
-    for i, est in enumerate(("primavera", "verao", "outono", "inverno")):
-        folha.paste(quadro(est), (i * L, 0))
+    for i, q in enumerate(quadros):
+        folha.paste(q, (i * L, 0))
     destino = RAIZ / "assets/sprites/cenario"
     destino.mkdir(parents=True, exist_ok=True)
-    folha.save(destino / "arvore_grande.png")
-    print("Árvores geradas em", destino / "arvore_grande.png")
+    folha.save(destino / nome)
+    print("Árvores geradas em", destino / nome)
+
+
+if __name__ == "__main__":
+    gerar_folha([quadro(est) for est in ("primavera", "verao", "outono", "inverno")], "arvore_grande.png")
+    gerar_folha([quadro_floresta(cfg, 20 + i) for i, cfg in enumerate(VARIACOES_FLORESTA)], "arvore_floresta.png")

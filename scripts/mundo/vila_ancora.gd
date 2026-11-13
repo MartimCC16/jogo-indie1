@@ -1,53 +1,27 @@
 # ============================================================================
-# vila_ancora.gd  —  Script principal da cena da Vila Âncora
+# vila_ancora.gd  —  Script da Vila Âncora (o mapa do prólogo)
 # ----------------------------------------------------------------------------
-# Por enquanto ele:
-#   - coloca a Lia no marcador "InicioLia";
-#   - limita a câmera da Lia às bordas do mapa;
-#   - mostra o nome da região na tela e some devagar.
-#   - se Sir Eco já despertou, faz ele seguir a Lia;
+# O que todo mapa faz (posicionar a Lia, câmera, Sir Eco, nome da região)
+# vem do MapaBase (scripts/mundo/mapa_base.gd). Aqui fica só o que é da vila:
+#   - a armadura caída some depois que o Sir Eco desperta;
 #   - ao voltar da batalha contra o Lobo da Névoa, mostra o FINAL DO PRÓLOGO.
 # ============================================================================
-extends Node2D
-
-# Texto que aparece quando a cena começa.
-@export var nome_da_regiao := "Vila Âncora"
-
-@onready var mapa: MapaDeTexto = $Mapa
-@onready var lia: Jogador = $Entidades/Lia
-@onready var nome_regiao: Label = $Interface/NomeRegiao
-@onready var inicio_lia: Marker2D = $Marcadores/InicioLia
-@onready var sir_eco: Seguidor = $Entidades/SirEco
+extends MapaBase
 
 
-func _ready() -> void:
-	# Obs.: o _ready() dos filhos roda ANTES do pai. Então, quando chegamos
-	# aqui, o nó "Mapa" já gerou os tiles (se precisava).
-	# Voltando de uma batalha? Então a Lia aparece onde estava.
-	if EstadoJogo.posicao_retorno != null:
-		lia.global_position = EstadoJogo.posicao_retorno
-		EstadoJogo.posicao_retorno = null
-	else:
-		lia.global_position = inicio_lia.global_position
-	lia.limitar_camera(mapa.retangulo_em_pixels())
-	_preparar_sir_eco()
+func _preparar_sir_eco() -> void:
+	super._preparar_sir_eco()  # "super" = faz o que o MapaBase já fazia
+	if EstadoJogo.tem_flag("eco_despertou"):
+		var armadura := get_node_or_null("Entidades/ArmaduraCaida")
+		if armadura:
+			armadura.queue_free()
 
+
+func _ao_entrar() -> void:
 	if _deve_mostrar_final_do_prologo():
 		_cena_final_do_prologo()
 	else:
-		_mostrar_nome_regiao()
-
-
-## Se o Sir Eco já despertou (ex.: voltando para a vila depois), ele já
-## aparece seguindo a Lia e a armadura caída some do mapa.
-func _preparar_sir_eco() -> void:
-	if not EstadoJogo.tem_flag("eco_despertou"):
-		return
-	var armadura := get_node_or_null("Entidades/ArmaduraCaida")
-	if armadura:
-		armadura.queue_free()
-	sir_eco.global_position = lia.global_position + Vector2(14, 0)
-	sir_eco.seguir(lia)
+		mostrar_nome_regiao()
 
 
 # ---------------------------------------------------------------------------
@@ -115,13 +89,3 @@ func _tela_fim_do_prologo() -> void:
 	tween.tween_property(fundo, "modulate:a", 0.0, 1.0)
 	await tween.finished
 	camada.queue_free()
-
-
-func _mostrar_nome_regiao() -> void:
-	nome_regiao.text = nome_da_regiao
-	nome_regiao.modulate.a = 0.0  # começa invisível (a = transparência)
-	# Um "tween" anima uma propriedade ao longo do tempo, passo a passo:
-	var tween := create_tween()
-	tween.tween_property(nome_regiao, "modulate:a", 1.0, 0.6)  # aparece
-	tween.tween_interval(2.0)                                   # espera
-	tween.tween_property(nome_regiao, "modulate:a", 0.0, 0.8)  # some

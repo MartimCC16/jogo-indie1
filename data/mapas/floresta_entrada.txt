@@ -1,0 +1,41 @@
+; =====================================================================
+; FLORESTA CINZENTA — Entrada  (40 colunas x 30 linhas)
+; Mesmas letras da vila (ver data/mapas/vila_ancora.txt), mas com o
+; tileset da floresta (assets/tiles/tileset_floresta.png):
+;   .  musgo            ,  musgo c/ cogumelinhos   =  trilha de folhas
+;   s  terra úmida      -  margem do riacho        ~  riacho (bloqueia)
+;   _  ponte de tábuas  R  rocha com musgo         t  samambaia (bloqueia)
+;   F  raízes (bloqueia)  ^  topo do muro  #  muro  J  pedra com runa
+;   j  pedra com runa na terra
+;   D  portal de pedra  T  floresta (bloqueia)     A  árvore grande
+; =====================================================================
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTT..........^^^^^^^^^^..........TTTTT
+TTTTT..........####DD####..........TTTTT
+TTT.....t..........==....t......,..TTTTT
+TTT.........,......==......R..t..A...TTT
+TTT..sjssssjs....,.==............FF..TTT
+TTT.ssssssssss.....==...A.,..........TTT
+TTT.jssssssssj=======..............A.TTT
+TTT.ssssssssss.....==.,..............TTT
+TTT..sjssssjs..A...==..........R.....TTT
+TTT.....t.......,..==....R..A........TTT
+TTT................==............t...TTT
+TTT----------------__----------------TTT
+TTT~~~~~~~~~~~~~~~~__~~~~~~~~~~~~~~~~TTT
+TTT~~~~~~~~~~~~~~~~__~~~~~~~~~~~~~~~~TTT
+TTT................==............,...TTT
+TTT.A.,.......R....==....t...........TTT
+TTT.....R..A.......==.,..............TTT
+TTT................==.........R....t.TTT
+TTT.FFFF....t......==...A...,........TTT
+TTT...............,==.............TTTTTT
+TTTTTT...,...A.....==.............TTTTTT
+TTTTTT..........t..==...R.....A...TTTTTT
+TTTTTT.............==.............TTTTTT
+TTTTTTTTTTTTTTTTTTT==TTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTT==TTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTT==TTTTTTTTTTTTTTTTTTT

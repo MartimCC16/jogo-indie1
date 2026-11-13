@@ -31,6 +31,11 @@ extends Node2D
 @export_node_path("Node2D") var caminho_arvores: NodePath = ^"../Entidades/Arvores"
 ## Estação das árvores grandes criadas por este mapa.
 @export var estacao_das_arvores: Arvore.Estacao = Arvore.Estacao.VERAO
+## Imagem das árvores desta região (vazio = árvore da vila).
+## Formato: 4 quadros de 48x80 lado a lado.
+@export var textura_das_arvores: Texture2D
+## Se ligado, cada árvore usa um dos 4 quadros (variações), em vez da estação.
+@export var variar_arvores := false
 
 ## Botões que aparecem no Inspetor do editor.
 @export_tool_button("Gerar mapa a partir do texto", "TileMapLayer") var _botao_gerar = gerar_mapa
@@ -88,6 +93,7 @@ const LEGENDA := {
 	"^": {"chao": GRAMA, "objeto": TELHADO},
 	"#": {"chao": GRAMA, "objeto": PAREDE},
 	"J": {"chao": GRAMA, "objeto": JANELA},
+	"j": {"chao": AREIA, "objeto": JANELA},
 	"D": {"chao": GRAMA, "objeto": PORTA},
 }
 
@@ -171,7 +177,12 @@ func _criar_arvores(celulas: Array[Vector2i]) -> void:
 		# acima do centro (o tronco encosta no fim do tile).
 		var ponto_global := chao.to_global(chao.map_to_local(celula) + Vector2(0, -2))
 		arvore.position = destino.to_local(ponto_global)
-		arvore.estacao = estacao_das_arvores
+		if textura_das_arvores:
+			arvore.textura = textura_das_arvores
+		if variar_arvores:
+			arvore.estacao = posmod(celula.x * 5 + celula.y * 11, 4) as Arvore.Estacao
+		else:
+			arvore.estacao = estacao_das_arvores
 		# Espelha algumas árvores para variar (sempre as mesmas, não é sorteio).
 		arvore.espelhar = (celula.x * 7 + celula.y * 13) % 3 == 0
 		destino.add_child(arvore)

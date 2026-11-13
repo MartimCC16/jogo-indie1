@@ -31,6 +31,18 @@ func tem_flag(nome: String) -> bool:
 
 ## Onde o jogador deve aparecer ao voltar para um mapa (null = no início).
 var posicao_retorno = null
+## Nome do marcador de entrada onde a Lia aparece no próximo mapa.
+var entrada_alvo := ""
+## Para onde a Lia olha ao chegar (-1 = não muda).
+var direcao_entrada := -1
+
+
+## Vai para outro mapa, aparecendo no marcador "entrada" (Marcadores/<entrada>).
+func ir_para_mapa(cena: String, entrada: String, direcao := -1) -> void:
+	entrada_alvo = entrada
+	direcao_entrada = direcao
+	posicao_retorno = null
+	trocar_cena(cena)
 
 var _cortina: ColorRect      # retângulo preto que cobre a tela
 var _trocando := false
@@ -83,8 +95,10 @@ const CENA_BATALHA := "res://scenes/combate/batalha.tscn"
 ##   inimigos: lista de ids de data/inimigos.json, ex.: ["lobo_nevoa"]
 ##   cena_retorno: cena para onde voltar no final (ex.: o mapa atual)
 ##   tutorial: true para mostrar as dicas de tutorial (dialogues/tutorial.json)
-func iniciar_batalha(inimigos: Array, cena_retorno := "", tutorial := false) -> void:
-	repetir_batalha({"inimigos": inimigos, "cena_retorno": cena_retorno, "tutorial": tutorial})
+##   flag_vitoria: flag marcada se o jogador vencer (ex.: "derrotou_fiapo_1")
+func iniciar_batalha(inimigos: Array, cena_retorno := "", tutorial := false, flag_vitoria := "") -> void:
+	repetir_batalha({"inimigos": inimigos, "cena_retorno": cena_retorno,
+		"tutorial": tutorial, "flag_vitoria": flag_vitoria})
 
 
 ## Começa uma batalha com uma configuração pronta (usado para "tentar de novo").
@@ -96,4 +110,7 @@ func repetir_batalha(config: Dictionary) -> void:
 ## Chamado pela batalha quando ela termina com vitória.
 func registrar_fim_batalha(venceu: bool) -> void:
 	venceu_ultima_batalha = venceu
+	var flag: String = proxima_batalha.get("flag_vitoria", "")
+	if venceu and flag != "":
+		marcar_flag(flag)
 	proxima_batalha = {}

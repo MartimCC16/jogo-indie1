@@ -165,7 +165,7 @@ Para o jogo crescer sem bagunça, toda região segue o mesmo "molde":
 
 ## Ordem sugerida de construção
 
-1. **Infraestrutura de cenário:** saídas entre mapas, tileset por região, camada de clima.
-2. **Floresta Cinzenta:** primeiro mapa + névoa que se abre com a Lanterna.
+1. ✅ **Infraestrutura de cenário:** saídas entre mapas, tileset por região, camada de clima.
+2. ✅ **Floresta Cinzenta:** primeiro mapa + névoa que se abre com a Lanterna.
 3. Cervo Ancião + Torre da Aurora (fim do capítulo 1).
 4. Depois: Picos, Desfiladeiro e Ilhas (em qualquer ordem).
