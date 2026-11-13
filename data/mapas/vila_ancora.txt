@@ -5,7 +5,10 @@
 ; LEGENDA:
 ;   .  grama            ,  grama com flor     =  caminho de terra
 ;   s  areia            -  espuma (beira-mar) ~  água (bloqueia)
-;   R  rocha (bloqueia) T  árvore (bloqueia)  F  cerca (bloqueia)
+;   R  rocha (bloqueia) F  cerca (bloqueia)
+;   T  floresta (bloqueia; árvore grande em tiles alternados)
+;   A  árvore grande sozinha (só o tronco bloqueia; dá pra passar atrás)
+;   t  arvorezinha de 1 tile (bloqueia)
 ;   ^  telhado          #  parede             J  janela
 ;   D  porta            (telhado/parede/janela/porta bloqueiam)
 ;
@@ -14,21 +17,21 @@
 ; "Gerar mapa a partir do texto" no Inspetor. Depois salve a cena (Ctrl+S).
 ; =====================================================================
 TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-TT.....,........=.....,...........,...TT
+TT.....,........=.....,.......A...,...TT
 T..^^^^^...,....=..........^^^^^......TT
-T..^^^^^........=.....R....^^^^^...,...T
+T..^^^^^....A...=.....R....^^^^^...,...T
 T..#J#J#....,...=..........#J#J#.......T
 T..##D##........=..........##D##.......T
 T....=..........=.............=........T
 T,...=================================.T
-T....=..........=.......,......=.......T
+T....=..........=.......,......=....A..T
 T.FFFFFF......^^^^^^^.........=..,.....T
 T.F,..,F......^^^^^^^.........=........T
 TT......,.....#J##J##......FFFFFF......T
 TT.F.,.F......###D###......F,..,F...,.TT
 T..FFFFF.........=.........F....F.....TT
-T.....,..........=...............,.....T
-TT...............=.....................T
+T.....,..........=.....A.........,.....T
+TT........A......=.....................T
 TRR..............=...................RRT
 TRRsssssssssssssssssssssssssssssssssssRR
 RRssssssssssssssssssssssssRsssssssssssRR

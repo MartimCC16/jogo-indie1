@@ -47,7 +47,12 @@ Cada quadro tem **16×16**. Colunas = quadros da caminhada (2). Linhas = direç�
 
 ### `tileset_vila.png` — 128×32 px (8×2 tiles de 16×16)
 - Linha 0: grama, grama com flor, caminho, areia, água, espuma, rocha, árvore
-- Linha 1: parede, telhado, porta, janela, cerca, piso de madeira, (livre), (livre)
+- Linha 1: parede, telhado, porta, janela, cerca, piso de madeira, bloqueio invisível, (livre)
+
+### `assets/sprites/cenario/arvore_grande.png` — 192×80 px
+4 quadros de 48×80 (3×5 tiles): **primavera, verão, outono, inverno**. A base do tronco
+fica no centro de baixo de cada quadro (x = 24, y = 76). Gerada por `tools/gerar_arvores.py`.
+Cena: `scenes/mundo/arvore.tscn` — escolha a **Estacao** no Inspetor. Só o tronco tem colisão.
 
 ### `armadura_caida.png` — 32×16 px (Sir Eco deitado na areia, antes do evento)
 

@@ -26,6 +26,12 @@ extends Node2D
 ## Arquivo .txt com o desenho do mapa (uma letra por tile).
 @export_file("*.txt") var arquivo_mapa: String = ""
 
+## Nó onde as ÁRVORES GRANDES (letras A e T) são criadas.
+## Precisa ter "Y Sort Enabled" para a Lia poder passar atrás das copas.
+@export_node_path("Node2D") var caminho_arvores: NodePath = ^"../Entidades/Arvores"
+## Estação das árvores grandes criadas por este mapa.
+@export var estacao_das_arvores: Arvore.Estacao = Arvore.Estacao.VERAO
+
 ## Botões que aparecem no Inspetor do editor.
 @export_tool_button("Gerar mapa a partir do texto", "TileMapLayer") var _botao_gerar = gerar_mapa
 @export_tool_button("Limpar mapa", "Remove") var _botao_limpar = limpar_mapa
@@ -48,9 +54,15 @@ const PORTA := Vector2i(2, 1)
 const JANELA := Vector2i(3, 1)
 const CERCA := Vector2i(4, 1)
 const PISO := Vector2i(5, 1)
+const BLOQUEIO := Vector2i(6, 1)   # tile invisível que só bloqueia a passagem
+
+const CENA_ARVORE := preload("res://scenes/mundo/arvore.tscn")
 
 # LEGENDA: cada letra do arquivo vira um tile no "chao" e, se tiver,
-# um tile na camada de "objeto" por cima.
+# um tile na camada de "objeto" por cima e/ou uma árvore grande:
+#   "arvore": "sozinha"  -> sempre cria uma árvore grande
+#   "arvore": "floresta" -> cria árvore só em tiles alternados (xadrez),
+#                           para a borda de floresta não ficar amontoada
 # Para criar uma letra nova, é só acrescentar uma linha aqui.
 const LEGENDA := {
 	".": {"chao": GRAMA},
@@ -61,7 +73,9 @@ const LEGENDA := {
 	"-": {"chao": ESPUMA},
 	"_": {"chao": PISO},
 	"R": {"chao": GRAMA, "objeto": ROCHA},
-	"T": {"chao": GRAMA, "objeto": ARVORE},
+	"T": {"chao": GRAMA, "objeto": BLOQUEIO, "arvore": "floresta"},
+	"A": {"chao": GRAMA, "arvore": "sozinha"},
+	"t": {"chao": GRAMA, "objeto": ARVORE},  # arvorezinha antiga de 1 tile
 	"F": {"chao": GRAMA, "objeto": CERCA},
 	"^": {"chao": GRAMA, "objeto": TELHADO},
 	"#": {"chao": GRAMA, "objeto": PAREDE},
@@ -89,6 +103,8 @@ func gerar_mapa() -> void:
 	var objetos := _camada_objetos()
 	chao.clear()
 	objetos.clear()
+	_limpar_arvores()
+	var celulas_arvores: Array[Vector2i] = []
 
 	# y = número da linha, x = número da coluna (começando do zero).
 	for y in linhas.size():
@@ -103,14 +119,58 @@ func gerar_mapa() -> void:
 			chao.set_cell(celula, FONTE, regra["chao"])
 			if regra.has("objeto"):
 				objetos.set_cell(celula, FONTE, regra["objeto"])
+			if regra.get("arvore", "") == "sozinha":
+				celulas_arvores.append(celula)
+			elif regra.get("arvore", "") == "floresta" and (x + y) % 2 == 0:
+				celulas_arvores.append(celula)
+
+	# No editor, cria as árvores na hora. No jogo, espera o fim do quadro
+	# ("call_deferred"), porque a cena ainda está sendo montada.
+	if Engine.is_editor_hint():
+		_criar_arvores(celulas_arvores)
+	else:
+		_criar_arvores.call_deferred(celulas_arvores)
 
 	print("Mapa gerado: %d linhas de '%s'" % [linhas.size(), arquivo_mapa])
 
 
-## Apaga todos os tiles das duas camadas.
+## Apaga todos os tiles das duas camadas e as árvores grandes.
 func limpar_mapa() -> void:
 	_camada_chao().clear()
 	_camada_objetos().clear()
+	_limpar_arvores()
+
+
+## Cria uma árvore grande em cada célula da lista.
+func _criar_arvores(celulas: Array[Vector2i]) -> void:
+	var destino := get_node_or_null(caminho_arvores) as Node2D
+	if destino == null:
+		if not celulas.is_empty():
+			push_warning("MapaDeTexto: nó das árvores não encontrado: " + str(caminho_arvores))
+		return
+	var chao := _camada_chao()
+	for celula in celulas:
+		var arvore: Arvore = CENA_ARVORE.instantiate()
+		# map_to_local = centro do tile. A "origem" da árvore fica 2 pixels
+		# acima do centro (o tronco encosta no fim do tile).
+		var ponto_global := chao.to_global(chao.map_to_local(celula) + Vector2(0, -2))
+		arvore.position = destino.to_local(ponto_global)
+		arvore.estacao = estacao_das_arvores
+		# Espelha algumas árvores para variar (sempre as mesmas, não é sorteio).
+		arvore.espelhar = (celula.x * 7 + celula.y * 13) % 3 == 0
+		destino.add_child(arvore)
+		if Engine.is_editor_hint():
+			# Necessário para a árvore ser SALVA junto com a cena no editor.
+			arvore.owner = get_tree().edited_scene_root
+
+
+func _limpar_arvores() -> void:
+	var destino := get_node_or_null(caminho_arvores)
+	if destino == null:
+		return
+	for filho in destino.get_children():
+		if filho is Arvore:
+			filho.queue_free()
 
 
 ## Retângulo ocupado pelo mapa, em PIXELS. Útil para limitar a câmera.

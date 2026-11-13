@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/mundo/arvore.gd" id="1_arvore"]
+[ext_resource type="Texture2D" path="res://assets/sprites/cenario/arvore_grande.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tronco"]
+size = Vector2(10, 6)
+
+[node name="Arvore" type="StaticBody2D"]
+collision_mask = 0
+script = ExtResource("1_arvore")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+centered = false
+offset = Vector2(-24, -68)
+hframes = 4
+frame = 1
+
+[node name="Colisao" type="CollisionShape2D" parent="."]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_tronco")

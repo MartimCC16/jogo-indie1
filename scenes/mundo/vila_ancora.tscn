@@ -29,6 +29,9 @@ position = Vector2(264, 120)
 [node name="Entidades" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Arvores" type="Node2D" parent="Entidades"]
+y_sort_enabled = true
+
 [node name="Lia" parent="Entidades" instance=ExtResource("4_lia")]
 position = Vector2(264, 120)
 
