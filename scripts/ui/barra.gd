@@ -12,7 +12,7 @@ extends Control
 		cor = novo
 		queue_redraw()  # pede para o Godot redesenhar a barra
 
-@export var cor_fundo := Color(0.12, 0.1, 0.18)
+@export var cor_fundo := Color(0.42, 0.24, 0.12)
 
 @export_range(0.0, 1.0) var valor := 1.0:
 	set(novo):
@@ -31,7 +31,7 @@ func definir(novo_valor: float, animar := true) -> void:
 # _draw é chamado pelo Godot quando a barra precisa ser desenhada.
 func _draw() -> void:
 	var tamanho := size
-	draw_rect(Rect2(Vector2.ZERO, tamanho), Color(0.02, 0.02, 0.05))  # borda preta
+	draw_rect(Rect2(Vector2.ZERO, tamanho), Color(0.25, 0.12, 0.05))  # borda marrom-escura
 	var interno := Rect2(Vector2.ONE, tamanho - Vector2(2, 2))
 	draw_rect(interno, cor_fundo)                                      # fundo
 	interno.size.x = floorf(interno.size.x * valor)

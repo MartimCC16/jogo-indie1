@@ -87,11 +87,13 @@ func _tela_fim_do_prologo() -> void:
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	titulo.set_anchors_preset(Control.PRESET_FULL_RECT)
+	titulo.add_theme_color_override("font_color", Color(1, 0.9, 0.62))
 	fundo.add_child(titulo)
 
 	var dica := Label.new()
 	dica.text = "Aperte AÇÃO para continuar explorando"
 	dica.add_theme_font_size_override("font_size", 8)
+	dica.add_theme_color_override("font_color", Color(0.85, 0.75, 0.6))
 	dica.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dica.position = Vector2(0, 158)
 	dica.size = Vector2(320, 12)

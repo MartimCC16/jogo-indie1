@@ -1,11 +1,12 @@
 ; =====================================================================
-; MAPA DA VILA ÂNCORA  (40 colunas x 24 linhas, cada letra = 1 tile 16x16)
+; MAPA DA VILA ÂNCORA  (40 colunas x 26 linhas, cada letra = 1 tile 16x16)
 ; Linhas que começam com ";" são comentários (o jogo ignora).
 ;
 ; LEGENDA:
 ;   .  grama            ,  grama com flor     =  caminho de terra
 ;   s  areia            -  espuma (beira-mar) ~  água (bloqueia)
-;   R  rocha (bloqueia) F  cerca (bloqueia)
+;   R  rocha na grama (bloqueia)   r  rocha na areia (bloqueia)
+;   F  cerca (bloqueia)
 ;   T  floresta (bloqueia; árvore grande em tiles alternados)
 ;   A  árvore grande sozinha (só o tronco bloqueia; dá pra passar atrás)
 ;   t  arvorezinha de 1 tile (bloqueia)
@@ -16,6 +17,8 @@
 ; scenes/mundo/vila_ancora.tscn, selecione o nó "Mapa" e clique no botão
 ; "Gerar mapa a partir do texto" no Inspetor. Depois salve a cena (Ctrl+S).
 ; =====================================================================
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 TT.....,........=.....,.......A...,...TT
 T..^^^^^...,....=..........^^^^^......TT
@@ -33,10 +36,10 @@ T..FFFFF.........=.........F....F.....TT
 T.....,..........=.....A.........,.....T
 TT........A......=.....................T
 TRR..............=...................RRT
-TRRsssssssssssssssssssssssssssssssssssRR
-RRssssssssssssssssssssssssRsssssssssssRR
-RssssssssRsssssssssssssssssssssssssssssR
----------------------------------------R
+TrrsssssssssssssssssssssssssssssssssssrR
+rrssssssssssssssssssssssssrsssssssssssrr
+rssssssssrsssssssssssssssssssssssssssssr
+---------------------------------------r
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

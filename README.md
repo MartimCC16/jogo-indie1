@@ -30,6 +30,14 @@ RPG de fantasia medieval em pixel art feito em **Godot 4** com **GDScript**.
 | `data/` | Dados do jogo em JSON: status de personagens, inimigos, magias. |
 | `tools/` | Scripts auxiliares fora do jogo (ex.: gerador de placeholders). |
 
+## Estilo visual
+
+Paleta **viva e quente** (grama verde-limão, telhados vermelhos, madeira alaranjada,
+água azul brilhante) com **contorno colorido** (cor vizinha escurecida, em vez de preto).
+A interface usa caixas **creme com borda de madeira** (`assets/ui/tema.tres`).
+Dica: sua arte vai combinar se você usar sombras puxando para o azul/roxo e luzes
+puxando para o amarelo, e evitar o preto puro.
+
 ## Gráficos provisórios (para você trocar depois)
 
 Todas as imagens são **placeholders** gerados por `tools/gerar_placeholders.py`.
@@ -45,9 +53,12 @@ Cada quadro tem **16×16**. Colunas = quadros da caminhada (2). Linhas = direç�
 | 2 | esquerda |
 | 3 | direita |
 
-### `tileset_vila.png` — 128×32 px (8×2 tiles de 16×16)
+### `tileset_vila.png` — 128×48 px (8×3 tiles de 16×16)
 - Linha 0: grama, grama com flor, caminho, areia, água, espuma, rocha, árvore
 - Linha 1: parede, telhado, porta, janela, cerca, piso de madeira, bloqueio invisível, (livre)
+- Linha 2: 3 variações de grama, variação de areia, variação de água (o mapa sorteia entre elas)
+
+Rocha, cerca e arvorezinha têm **fundo transparente** (o chão de baixo aparece).
 
 ### `assets/sprites/cenario/arvore_grande.png` — 192×80 px
 4 quadros de 48×80 (3×5 tiles): **primavera, verão, outono, inverno**. A base do tronco

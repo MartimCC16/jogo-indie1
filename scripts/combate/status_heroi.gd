@@ -9,7 +9,7 @@ extends HBoxContainer
 
 const COR_VIDA := Color("#e04848")
 const COR_MANA := Color("#4a8cff")
-const COR_DESTAQUE := Color("#ffd75a")   # nome de quem está jogando
+const COR_DESTAQUE := Color("#d9480f")   # nome de quem está jogando
 const LARGURA_NOME := 44
 const LARGURA_BARRAS := 60
 

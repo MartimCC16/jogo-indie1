@@ -18,9 +18,9 @@ extends Control
 @export var raio_perfeito := 0.06
 @export var raio_bom := 0.16
 
-const COR_FUNDO := Color(0.15, 0.14, 0.22)
-const COR_BOM := Color(0.55, 0.42, 0.18)
-const COR_PERFEITO := Color(1.0, 0.84, 0.35)
+const COR_FUNDO := Color(0.42, 0.24, 0.12)
+const COR_BOM := Color(0.95, 0.62, 0.2)
+const COR_PERFEITO := Color(1.0, 0.95, 0.45)
 
 var _progresso := 0.0   # posição do cursor (0.0 a 1.0)
 
@@ -57,7 +57,7 @@ func _avaliar(posicao: float) -> String:
 
 func _draw() -> void:
 	var r := Rect2(Vector2.ZERO, size)
-	draw_rect(r, Color(0.02, 0.02, 0.05))
+	draw_rect(r, Color(0.25, 0.12, 0.05))
 	draw_rect(r.grow(-1), COR_FUNDO)
 	var largura := size.x
 	draw_rect(Rect2((centro - raio_bom) * largura, 1, raio_bom * 2 * largura, size.y - 2), COR_BOM)

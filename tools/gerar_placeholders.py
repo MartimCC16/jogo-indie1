@@ -19,22 +19,28 @@ RAIZ = Path(__file__).resolve().parent.parent
 T = 16  # tamanho de um "tile"/quadro em pixels
 
 # ---------------------------------------------------------------- paleta ----
+# Paleta VIVA e quente (cores saturadas, estilo "fazendinha aconchegante").
 TRANSP = (0, 0, 0, 0)
-PRETO = (20, 16, 24, 255)
-PELE = (240, 196, 160, 255)
-RUIVO = (196, 64, 32, 255)
-RUIVO_ESC = (140, 40, 24, 255)
-AZUL_FAIXA = (64, 140, 230, 255)
-AZUL_MARINHO = (28, 40, 88, 255)
-AZUL_MARINHO_CL = (44, 60, 120, 255)
-AMARELO = (255, 220, 90, 255)
-PRATA = (190, 196, 210, 255)
-PRATA_ESC = (120, 126, 144, 255)
-PRATA_CL = (232, 236, 244, 255)
-OLHO_AZUL = (110, 220, 255, 255)
-MARROM = (120, 80, 48, 255)
-MARROM_ESC = (80, 52, 32, 255)
-VERDE = (72, 140, 60, 255)
+PRETO = (46, 26, 40, 255)
+PELE = (255, 212, 166, 255)
+PELE_ESC = (232, 162, 120, 255)
+RUIVO = (236, 100, 40, 255)
+RUIVO_ESC = (178, 58, 30, 255)
+RUIVO_CL = (255, 156, 72, 255)
+AZUL_FAIXA = (56, 152, 255, 255)
+AZUL_MARINHO = (40, 58, 136, 255)
+AZUL_MARINHO_CL = (70, 98, 190, 255)
+CAMISA = (248, 238, 214, 255)
+AMARELO = (255, 214, 72, 255)
+AMARELO_CL = (255, 248, 170, 255)
+PRATA = (200, 210, 228, 255)
+PRATA_ESC = (126, 136, 168, 255)
+PRATA_CL = (244, 248, 255, 255)
+OLHO_AZUL = (90, 230, 255, 255)
+MARROM = (150, 88, 44, 255)
+MARROM_ESC = (100, 56, 32, 255)
+VERDE = (80, 170, 64, 255)
+VERDE_ESC = (46, 120, 52, 255)
 
 
 def nova(w, h):
@@ -50,6 +56,24 @@ def ret(img, x, y, w, h, cor, ox=0, oy=0):
 
 def px(img, x, y, cor, ox=0, oy=0):
     img.putpixel((ox + x, oy + y), cor)
+
+
+def contorno(img, fator=0.38, area=None):
+    """Desenha um contorno escuro e COLORIDO em volta do desenho.
+    A cor do contorno é a cor vizinha escurecida (fica mais vivo que preto)."""
+    x0, y0, x1, y1 = area or (0, 0, img.width, img.height)
+    copia = img.copy()
+    for y in range(y0, y1):
+        for x in range(x0, x1):
+            if copia.getpixel((x, y))[3] != 0:
+                continue
+            for dx, dy in ((0, 1), (1, 0), (-1, 0), (0, -1)):
+                nx, ny = x + dx, y + dy
+                if x0 <= nx < x1 and y0 <= ny < y1:
+                    r, g, b, a = copia.getpixel((nx, ny))
+                    if a == 255:
+                        img.putpixel((x, y), (int(r * fator), int(g * fator), int(b * fator), 255))
+                        break
 
 
 # ------------------------------------------------------------- personagens --
@@ -71,67 +95,88 @@ def pernas(img, ox, oy, quadro, cor):
 
 def desenha_lia(img, ox, oy, direcao, quadro):
     pernas(img, ox, oy, quadro, MARROM_ESC)
-    # capa azul-marinho (corpo)
+    # capa azul-marinho (corpo), com luz à esquerda
     ret(img, 4, 8, 8, 6, AZUL_MARINHO, ox, oy)
-    ret(img, 5, 8, 6, 1, AZUL_MARINHO_CL, ox, oy)
+    ret(img, 4, 8, 2, 5, AZUL_MARINHO_CL, ox, oy)
+    if direcao != 1:
+        ret(img, 7, 8, 2, 4, CAMISA, ox, oy)       # camisa aparecendo
     # cabeça
     ret(img, 5, 2, 6, 6, PELE, ox, oy)
+    ret(img, 10, 3, 1, 5, PELE_ESC, ox, oy)
     # cabelo ruivo curto
     ret(img, 4, 1, 8, 3, RUIVO, ox, oy)
-    ret(img, 4, 4, 1, 3, RUIVO, ox, oy)
-    ret(img, 11, 4, 1, 3, RUIVO, ox, oy)
+    ret(img, 5, 1, 4, 1, RUIVO_CL, ox, oy)
+    ret(img, 4, 4, 1, 3, RUIVO_ESC, ox, oy)
+    ret(img, 11, 4, 1, 3, RUIVO_ESC, ox, oy)
     # faixa azul na testa
     ret(img, 4, 3, 8, 1, AZUL_FAIXA, ox, oy)
-    if direcao == 0:  # baixo: olhos e lanterna na frente
-        px(img, 6, 5, PRETO, ox, oy)
-        px(img, 9, 5, PRETO, ox, oy)
-        ret(img, 11, 10, 2, 2, AMARELO, ox, oy)
-    elif direcao == 1:  # cima: só cabelo e capa
-        ret(img, 5, 4, 6, 3, RUIVO_ESC, ox, oy)
+    if direcao == 0:  # baixo
+        ret(img, 6, 5, 1, 2, PRETO, ox, oy)
+        ret(img, 9, 5, 1, 2, PRETO, ox, oy)
+        px(img, 6, 7, (255, 160, 150, 255), ox, oy)  # bochechas
+        px(img, 9, 7, (255, 160, 150, 255), ox, oy)
+        ret(img, 12, 10, 2, 3, AMARELO, ox, oy)       # lanterna
+        px(img, 12, 10, AMARELO_CL, ox, oy)
+    elif direcao == 1:  # cima
+        ret(img, 5, 4, 6, 3, RUIVO, ox, oy)
+        ret(img, 6, 4, 3, 1, RUIVO_CL, ox, oy)
         ret(img, 4, 3, 8, 1, AZUL_FAIXA, ox, oy)
     elif direcao == 2:  # esquerda
-        px(img, 6, 5, PRETO, ox, oy)
+        ret(img, 6, 5, 1, 2, PRETO, ox, oy)
         ret(img, 9, 4, 3, 3, RUIVO, ox, oy)
-        ret(img, 2, 10, 2, 2, AMARELO, ox, oy)
+        ret(img, 2, 10, 2, 3, AMARELO, ox, oy)
+        px(img, 2, 10, AMARELO_CL, ox, oy)
     else:  # direita
-        px(img, 9, 5, PRETO, ox, oy)
+        ret(img, 9, 5, 1, 2, PRETO, ox, oy)
         ret(img, 4, 4, 3, 3, RUIVO, ox, oy)
-        ret(img, 12, 10, 2, 2, AMARELO, ox, oy)
+        ret(img, 12, 10, 2, 3, AMARELO, ox, oy)
+        px(img, 13, 10, AMARELO_CL, ox, oy)
 
 
 def desenha_eco(img, ox, oy, direcao, quadro):
     pernas(img, ox, oy, quadro, PRATA_ESC)
     # corpo de armadura (maior que a Lia)
-    ret(img, 3, 7, 10, 7, PRATA, ox, oy)
-    ret(img, 3, 7, 10, 1, PRATA_CL, ox, oy)
+    ret(img, 3, 8, 10, 6, PRATA, ox, oy)
+    ret(img, 3, 8, 10, 1, PRATA_CL, ox, oy)
+    ret(img, 11, 9, 2, 5, PRATA_ESC, ox, oy)
+    ret(img, 7, 9, 2, 3, AZUL_FAIXA, ox, oy)  # emblema azul no peito
     # elmo
-    ret(img, 4, 0, 8, 7, PRATA, ox, oy)
-    ret(img, 4, 0, 8, 1, PRATA_CL, ox, oy)
+    ret(img, 4, 1, 8, 7, PRATA, ox, oy)
+    ret(img, 4, 1, 8, 1, PRATA_CL, ox, oy)
+    ret(img, 5, 2, 1, 4, PRATA_CL, ox, oy)
+    ret(img, 11, 2, 1, 5, PRATA_ESC, ox, oy)
+    ret(img, 7, 0, 2, 1, (220, 60, 60, 255), ox, oy)  # penacho vermelho
     if direcao == 1:  # de costas
-        ret(img, 7, 1, 2, 5, PRATA_ESC, ox, oy)
+        ret(img, 7, 2, 2, 5, PRATA_ESC, ox, oy)
         return
     # viseira escura (o elmo é vazio!) com olhos azuis brilhando
-    ret(img, 5, 3, 6, 2, PRETO, ox, oy)
+    ret(img, 5, 4, 6, 2, PRETO, ox, oy)
     if direcao == 0:
-        px(img, 6, 3, OLHO_AZUL, ox, oy)
-        px(img, 9, 3, OLHO_AZUL, ox, oy)
-        # escudo enorme na frente
-        ret(img, 9, 8, 5, 6, AZUL_MARINHO, ox, oy)
-        ret(img, 11, 9, 1, 4, PRATA_CL, ox, oy)
+        px(img, 6, 4, OLHO_AZUL, ox, oy)
+        px(img, 9, 4, OLHO_AZUL, ox, oy)
+        ret(img, 9, 9, 5, 5, AZUL_MARINHO, ox, oy)   # escudo enorme
+        ret(img, 9, 9, 5, 1, AZUL_MARINHO_CL, ox, oy)
+        ret(img, 11, 10, 1, 3, AMARELO, ox, oy)
     elif direcao == 2:
-        px(img, 5, 3, OLHO_AZUL, ox, oy)
-        ret(img, 1, 7, 4, 7, AZUL_MARINHO, ox, oy)
+        px(img, 5, 4, OLHO_AZUL, ox, oy)
+        ret(img, 1, 8, 4, 6, AZUL_MARINHO, ox, oy)
+        ret(img, 2, 10, 1, 2, AMARELO, ox, oy)
     else:
-        px(img, 10, 3, OLHO_AZUL, ox, oy)
-        ret(img, 11, 7, 4, 7, AZUL_MARINHO, ox, oy)
+        px(img, 10, 4, OLHO_AZUL, ox, oy)
+        ret(img, 11, 8, 4, 6, AZUL_MARINHO, ox, oy)
+        ret(img, 13, 10, 1, 2, AMARELO, ox, oy)
 
 
 def desenha_aldeao(img, ox, oy, direcao, quadro):
     pernas(img, ox, oy, quadro, MARROM_ESC)
     ret(img, 4, 8, 8, 6, VERDE, ox, oy)
-    ret(img, 5, 2, 6, 6, PELE, ox, oy)
-    ret(img, 4, 1, 8, 2, MARROM, ox, oy)  # chapéu
-    ret(img, 3, 2, 10, 1, MARROM_ESC, ox, oy)
+    ret(img, 4, 8, 2, 5, (120, 200, 90, 255), ox, oy)
+    ret(img, 4, 11, 8, 1, MARROM, ox, oy)            # cinto
+    ret(img, 5, 3, 6, 5, PELE, ox, oy)
+    ret(img, 10, 4, 1, 4, PELE_ESC, ox, oy)
+    ret(img, 5, 7, 6, 1, (236, 236, 236, 255), ox, oy)  # barba branca
+    ret(img, 4, 1, 8, 2, (232, 190, 90, 255), ox, oy)   # chapéu de palha
+    ret(img, 3, 3, 10, 1, (196, 150, 64, 255), ox, oy)
     if direcao == 0:
         px(img, 6, 5, PRETO, ox, oy)
         px(img, 9, 5, PRETO, ox, oy)
@@ -146,6 +191,8 @@ def folha_personagem(funcao_desenho, nome_arquivo):
     for direcao in range(4):
         for quadro in range(2):
             funcao_desenho(img, quadro * T, direcao * T, direcao, quadro)
+            area = (quadro * T, direcao * T, quadro * T + T, direcao * T + T)
+            contorno(img, area=area)
     img.save(RAIZ / "assets/sprites/personagens" / nome_arquivo)
 
 
@@ -153,21 +200,22 @@ def folha_personagem(funcao_desenho, nome_arquivo):
 def gerar_lobo():
     # Lobo da Névoa: 32x32, um quadro só por enquanto.
     img = nova(32, 32)
-    CINZA = (110, 104, 140, 255)
-    CINZA_ESC = (70, 64, 100, 255)
+    CINZA = (132, 122, 206, 255)
+    CINZA_ESC = (84, 72, 156, 255)
     NEVOA = (190, 186, 220, 160)
     ret(img, 6, 12, 20, 10, CINZA)          # corpo
     ret(img, 2, 8, 10, 9, CINZA)            # cabeça
     ret(img, 2, 5, 3, 4, CINZA_ESC)         # orelha
     ret(img, 8, 5, 3, 4, CINZA_ESC)         # orelha
     ret(img, 0, 13, 3, 3, CINZA_ESC)        # focinho
-    px(img, 5, 11, (255, 80, 80, 255))      # olho vermelho
-    px(img, 9, 11, (255, 80, 80, 255))
+    px(img, 5, 11, (255, 150, 40, 255))     # olho cor de brasa
+    px(img, 9, 11, (255, 150, 40, 255))
     for x in (8, 12, 20, 24):               # patas
         ret(img, x, 22, 2, 6, CINZA_ESC)
     ret(img, 26, 10, 5, 3, CINZA)           # rabo
     for (x, y) in ((4, 26), (12, 28), (20, 27), (27, 25), (1, 22), (29, 18)):
         ret(img, x, y, 3, 2, NEVOA)         # fiapos de névoa
+    contorno(img)
     img.save(RAIZ / "assets/sprites/inimigos/lobo_nevoa.png")
 
 
@@ -185,6 +233,7 @@ def gerar_armadura_caida():
     ret(img, 23, 10, 8, 3, PRATA_ESC)
     ret(img, 12, 12, 9, 4, AZUL_MARINHO)    # escudo enorme por baixo
     ret(img, 15, 13, 3, 2, PRATA_CL)
+    contorno(img)
     img.save(RAIZ / "assets/sprites/personagens/armadura_caida.png")
 
 
@@ -202,54 +251,209 @@ def gerar_fiapo():
     ret(img, 9, 5, 2, 2, PRETO)
     px(img, 5, 5, OLHO_AZUL)
     px(img, 9, 5, OLHO_AZUL)
+    contorno(img)
     img.save(RAIZ / "assets/sprites/inimigos/fiapo_nevoa.png")
 
 
 # ----------------------------------------------------------------- tileset --
-# tileset_vila.png: 8 colunas x 2 linhas de tiles 16x16 (128 x 32 pixels)
-#  Linha 0: 0 grama | 1 grama c/ flor | 2 caminho | 3 areia | 4 água | 5 espuma | 6 rocha | 7 árvore
-#  Linha 1: 0 parede | 1 telhado | 2 porta | 3 janela | 4 cerca | 5 piso madeira | 6 (livre) | 7 (livre)
-def gerar_tileset():
-    img = nova(T * 8, T * 2)
+# tileset_vila.png: 8 colunas x 3 linhas de tiles 16x16 (128 x 48 pixels)
+#  Linha 0: 0 grama | 1 grama c/ flor | 2 caminho | 3 areia | 4 água | 5 espuma | 6 rocha | 7 arvorezinha
+#  Linha 1: 0 parede | 1 telhado | 2 porta | 3 janela | 4 cerca | 5 piso madeira | 6 bloqueio (vazio) | 7 (livre)
+#  Linha 2: 0-2 variações de grama | 3 variação de areia | 4 variação de água | 5-7 (livres)
+import random as _random
 
-    def tile(col, lin, base, detalhes=()):
+G_BASE = (108, 196, 52)
+G_ESC = (70, 156, 44)
+G_ESC2 = (48, 124, 46)
+G_CL = (150, 222, 72)
+G_BRILHO = (200, 240, 110)
+TERRA = (222, 156, 84)
+TERRA_ESC = (178, 112, 58)
+TERRA_CL = (244, 194, 120)
+AREIA = (250, 224, 140)
+AREIA_ESC = (226, 188, 106)
+AREIA_CL = (255, 244, 190)
+AGUA = (44, 146, 236)
+AGUA_ESC = (28, 108, 200)
+AGUA_CL = (100, 196, 255)
+AGUA_BRILHO = (226, 248, 255)
+
+
+def _base(img, col, lin, cor):
+    ret(img, 0, 0, T, T, cor, col * T, lin * T)
+
+
+def _salpicar(img, col, lin, rnd, cores, quantidade, margem=1):
+    for _ in range(quantidade):
+        x = rnd.randint(margem, T - 1 - margem)
+        y = rnd.randint(margem, T - 1 - margem)
+        px(img, x, y, rnd.choice(cores) + (255,), col * T, lin * T)
+
+
+def _tufos_grama(img, col, lin, rnd, quantidade):
+    """Folhinhas de grama em forma de 'v' (escuro embaixo, claro na ponta)."""
+    ox, oy = col * T, lin * T
+    for _ in range(quantidade):
+        x = rnd.randint(1, T - 3)
+        y = rnd.randint(2, T - 2)
+        px(img, x, y, G_ESC + (255,), ox, oy)
+        px(img, x + 2, y, G_ESC + (255,), ox, oy)
+        px(img, x + 1, y, G_ESC2 + (255,), ox, oy)
+        px(img, x, y - 1, G_CL + (255,), ox, oy)
+        px(img, x + 2, y - 1, G_CL + (255,), ox, oy)
+        if rnd.random() < 0.3:
+            px(img, x + 2, y - 2, G_BRILHO + (255,), ox, oy)
+
+
+def _grama(img, col, lin, semente, flores=False):
+    rnd = _random.Random(semente)
+    _base(img, col, lin, G_BASE + (255,))
+    _salpicar(img, col, lin, rnd, [G_CL, G_ESC], 10, 0)
+    _tufos_grama(img, col, lin, rnd, 4)
+    if flores:
         ox, oy = col * T, lin * T
-        ret(img, 0, 0, T, T, base, ox, oy)
-        for (x, y, w, h, cor) in detalhes:
-            ret(img, x, y, w, h, cor, ox, oy)
+        for (x, y, cor) in ((4, 4, (255, 96, 140)), (11, 9, (255, 240, 90)), (6, 12, (130, 170, 255))):
+            for dx, dy in ((0, -1), (-1, 0), (1, 0), (0, 1)):
+                px(img, x + dx, y + dy, cor + (255,), ox, oy)
+            px(img, x, y, (255, 255, 230, 255), ox, oy)
 
-    G = (88, 160, 72, 255)
-    G2 = (70, 136, 58, 255)
-    tile(0, 0, G, [(3, 4, 1, 2, G2), (11, 9, 1, 2, G2), (6, 12, 1, 2, G2)])
-    tile(1, 0, G, [(3, 4, 1, 2, G2), (10, 6, 2, 2, (240, 90, 120, 255)),
-                   (4, 11, 2, 2, (250, 240, 120, 255))])
-    tile(2, 0, (176, 140, 92, 255), [(4, 5, 2, 1, (150, 116, 74, 255)),
-                                     (10, 11, 2, 1, (150, 116, 74, 255))])
-    tile(3, 0, (236, 214, 150, 255), [(5, 3, 1, 1, (210, 186, 124, 255)),
-                                      (12, 10, 1, 1, (210, 186, 124, 255))])
-    tile(4, 0, (52, 112, 200, 255), [(3, 5, 4, 1, (90, 150, 230, 255)),
-                                     (9, 11, 4, 1, (90, 150, 230, 255))])
-    tile(5, 0, (80, 140, 220, 255), [(0, 0, 16, 2, (230, 240, 255, 255)),
-                                     (4, 6, 3, 1, (160, 200, 250, 255))])
-    tile(6, 0, G, [(2, 3, 12, 11, (120, 120, 130, 255)),
-                   (3, 4, 6, 2, (160, 160, 170, 255))])
-    tile(7, 0, G, [(6, 10, 4, 6, MARROM), (1, 0, 14, 11, (40, 110, 50, 255)),
-                   (3, 2, 4, 3, (70, 150, 70, 255))])
 
-    tile(0, 1, (200, 180, 150, 255), [(0, 7, 16, 1, (170, 150, 120, 255)),
-                                      (0, 15, 16, 1, (170, 150, 120, 255))])
-    tile(1, 1, (170, 60, 50, 255), [(0, 3, 16, 1, (130, 40, 36, 255)),
-                                    (0, 8, 16, 1, (130, 40, 36, 255)),
-                                    (0, 13, 16, 1, (130, 40, 36, 255))])
-    tile(2, 1, (200, 180, 150, 255), [(4, 3, 8, 13, MARROM),
-                                      (10, 9, 1, 1, AMARELO)])
-    tile(3, 1, (200, 180, 150, 255), [(4, 4, 8, 7, (90, 140, 200, 255)),
-                                      (7, 4, 2, 7, MARROM_ESC),
-                                      (4, 7, 8, 1, MARROM_ESC)])
-    tile(4, 1, G, [(0, 5, 16, 2, MARROM), (0, 10, 16, 2, MARROM),
-                   (2, 3, 2, 11, MARROM_ESC), (12, 3, 2, 11, MARROM_ESC)])
-    tile(5, 1, (160, 110, 70, 255), [(0, 5, 16, 1, (130, 86, 52, 255)),
-                                     (0, 11, 16, 1, (130, 86, 52, 255))])
+def _areia(img, col, lin, semente):
+    rnd = _random.Random(semente)
+    _base(img, col, lin, AREIA + (255,))
+    _salpicar(img, col, lin, rnd, [AREIA_ESC, AREIA_ESC, AREIA_CL], 14, 0)
+
+
+def _agua(img, col, lin, semente):
+    rnd = _random.Random(semente)
+    ox, oy = col * T, lin * T
+    _base(img, col, lin, AGUA + (255,))
+    for _ in range(3):  # ondinhas
+        x, y = rnd.randint(1, 10), rnd.randint(2, 13)
+        ret(img, x, y, 4, 1, AGUA_CL + (255,), ox, oy)
+        ret(img, x + 1, y + 1, 3, 1, AGUA_ESC + (255,), ox, oy)
+    for _ in range(2):  # brilhos
+        px(img, rnd.randint(1, 14), rnd.randint(1, 14), AGUA_BRILHO + (255,), ox, oy)
+
+
+def gerar_tileset():
+    img = nova(T * 8, T * 3)
+    a = lambda c: c + (255,)
+
+    # --- linha 0 ---
+    _grama(img, 0, 0, 1)
+    _grama(img, 1, 0, 2, flores=True)
+    # caminho de terra com pedrinhas
+    rnd = _random.Random(3)
+    _base(img, 2, 0, a(TERRA))
+    _salpicar(img, 2, 0, rnd, [TERRA_ESC, TERRA_CL], 12, 0)
+    for (x, y) in ((4, 5), (11, 11)):
+        ret(img, x, y, 2, 2, a((190, 180, 170)), 2 * T, 0)
+        px(img, x, y, a((236, 230, 220)), 2 * T, 0)
+        ret(img, x, y + 2, 2, 1, a(TERRA_ESC), 2 * T, 0)
+    _areia(img, 3, 0, 4)
+    _agua(img, 4, 0, 5)
+    # espuma: água com a onda branca encostando na areia (em cima)
+    _agua(img, 5, 0, 6)
+    ret(img, 0, 0, T, 3, a(AREIA), 5 * T, 0)
+    for x in range(T):
+        altura = 3 + (1 if (x // 3) % 2 else 0)
+        px(img, x, altura, a((255, 255, 255)), 5 * T, 0)
+        px(img, x, altura + 1, a((190, 232, 255)), 5 * T, 0)
+    # rocha (fundo transparente: o chão de baixo aparece)
+    ox = 6 * T
+    ret(img, 2, 13, 12, 2, (30, 40, 30, 70), ox, 0)  # sombrinha
+    ret(img, 3, 5, 10, 8, a((150, 156, 178)), ox, 0)
+    ret(img, 4, 4, 8, 1, a((150, 156, 178)), ox, 0)
+    ret(img, 4, 5, 5, 3, a((208, 212, 228)), ox, 0)
+    ret(img, 9, 9, 4, 4, a((112, 116, 142)), ox, 0)
+    ret(img, 3, 13, 10, 1, a((62, 64, 86)), ox, 0)
+    for y in range(4, 13):
+        px(img, 2, y + 1, a((62, 64, 86)), ox, 0)
+        px(img, 13, y + 1, a((62, 64, 86)), ox, 0)
+    ret(img, 4, 3, 8, 1, a((62, 64, 86)), ox, 0)
+    # arvorezinha (1 tile, fundo transparente)
+    ox = 7 * T
+    ret(img, 7, 10, 2, 5, a(MARROM[:3]), ox, 0)
+    for (x, y, r) in ((8, 6, 5), (5, 8, 3), (11, 8, 3)):
+        for yy in range(-r, r + 1):
+            for xx in range(-r, r + 1):
+                if xx * xx + yy * yy <= r * r:
+                    px(img, x + xx, y + yy, a((60, 170, 60) if yy < 0 else (40, 128, 52)), ox, 0)
+    px(img, 6, 3, a((150, 230, 100)), ox, 0)
+    px(img, 7, 3, a((150, 230, 100)), ox, 0)
+
+    # --- linha 1 (casa) ---
+    oy = T
+    MAD = (206, 136, 72)
+    MAD_ESC = (150, 90, 46)
+    MAD_CL = (236, 176, 104)
+    # parede de tábuas
+    ret(img, 0, 0, T, T, a(MAD), 0, oy)
+    for y in (0, 5, 10, 15):
+        ret(img, 0, y, T, 1, a(MAD_ESC), 0, oy)
+        ret(img, 0, y + 1, T, 1, a(MAD_CL), 0, oy)
+    for (x, y) in ((5, 2), (12, 7), (3, 12)):
+        ret(img, x, y, 1, 3, a(MAD_ESC), 0, oy)
+    # telhado vermelho com telhas
+    TEL = (222, 70, 52)
+    TEL_ESC = (160, 38, 44)
+    TEL_CL = (250, 124, 80)
+    ox = T
+    ret(img, 0, 0, T, T, a(TEL), ox, oy)
+    for linha, y in enumerate((0, 5, 10)):
+        ret(img, 0, y, T, 1, a(TEL_CL), ox, oy)
+        ret(img, 0, y + 4, T, 1, a(TEL_ESC), ox, oy)
+        desloca = 0 if linha % 2 == 0 else 4
+        for x in range(desloca, T, 8):
+            ret(img, x, y + 1, 1, 3, a(TEL_ESC), ox, oy)
+    # porta
+    ox = 2 * T
+    ret(img, 0, 0, T, T, a(MAD), ox, oy)
+    ret(img, 3, 2, 10, 14, a(MAD_ESC), ox, oy)
+    ret(img, 4, 3, 8, 13, a((122, 66, 36)), ox, oy)
+    ret(img, 7, 3, 1, 13, a((96, 50, 30)), ox, oy)
+    ret(img, 4, 3, 8, 1, a((150, 84, 44)), ox, oy)
+    ret(img, 10, 9, 1, 2, a(AMARELO[:3]), ox, oy)
+    # janela com vidro brilhando e floreira
+    ox = 3 * T
+    ret(img, 0, 0, T, T, a(MAD), ox, oy)
+    ret(img, 2, 2, 12, 10, a(MAD_ESC), ox, oy)
+    ret(img, 3, 3, 10, 8, a((120, 206, 255)), ox, oy)
+    ret(img, 7, 3, 2, 8, a(MAD_CL), ox, oy)
+    ret(img, 3, 6, 10, 1, a(MAD_CL), ox, oy)
+    px(img, 4, 4, a((240, 252, 255)), ox, oy)
+    px(img, 5, 4, a((240, 252, 255)), ox, oy)
+    px(img, 4, 5, a((240, 252, 255)), ox, oy)
+    ret(img, 2, 12, 12, 3, a((150, 84, 44)), ox, oy)
+    for x in (3, 6, 9, 12):
+        px(img, x, 11, a((255, 96, 140)), ox, oy)
+        px(img, x + 1, 11, a((80, 180, 70)), ox, oy)
+    # cerca de madeira (fundo transparente)
+    ox = 4 * T
+    CER = (240, 196, 128)
+    CER_ESC = (170, 112, 62)
+    for y in (5, 10):
+        ret(img, 0, y, T, 2, a(CER), ox, oy)
+        ret(img, 0, y + 2, T, 1, a(CER_ESC), ox, oy)
+    for x in (2, 11):
+        ret(img, x, 2, 3, 12, a(CER), ox, oy)
+        ret(img, x + 2, 2, 1, 12, a(CER_ESC), ox, oy)
+        ret(img, x, 14, 3, 1, a(CER_ESC), ox, oy)
+    # piso de madeira
+    ox = 5 * T
+    ret(img, 0, 0, T, T, a((200, 140, 84)), ox, oy)
+    for y in (3, 7, 11, 15):
+        ret(img, 0, y, T, 1, a((156, 98, 56)), ox, oy)
+    # (6,1) bloqueio: fica transparente de propósito
+
+    # --- linha 2: variações (o mapa sorteia entre elas para não repetir) ---
+    _grama(img, 0, 2, 11)
+    _grama(img, 1, 2, 12)
+    _grama(img, 2, 2, 13)
+    _areia(img, 3, 2, 14)
+    _agua(img, 4, 2, 15)
+
     img.save(RAIZ / "assets/tiles/tileset_vila.png")
 
 

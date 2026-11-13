@@ -10,19 +10,19 @@ script = ExtResource("1_batalha")
 [node name="Ceu" type="ColorRect" parent="."]
 offset_right = 320.0
 offset_bottom = 124.0
-color = Color(0.16, 0.17, 0.27, 1)
+color = Color(0.5, 0.78, 0.98, 1)
 
 [node name="Nevoa" type="ColorRect" parent="."]
 offset_top = 40.0
 offset_right = 320.0
 offset_bottom = 70.0
-color = Color(0.55, 0.55, 0.68, 0.18)
+color = Color(1, 1, 1, 0.25)
 
 [node name="Chao" type="ColorRect" parent="."]
 offset_top = 96.0
 offset_right = 320.0
 offset_bottom = 124.0
-color = Color(0.36, 0.42, 0.3, 1)
+color = Color(0.42, 0.77, 0.2, 1)
 
 [node name="Combatentes" type="Node2D" parent="."]
 

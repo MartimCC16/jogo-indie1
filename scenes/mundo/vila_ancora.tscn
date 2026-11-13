@@ -24,7 +24,7 @@ tile_set = ExtResource("3_tileset")
 [node name="Marcadores" type="Node2D" parent="."]
 
 [node name="InicioLia" type="Marker2D" parent="Marcadores"]
-position = Vector2(264, 120)
+position = Vector2(264, 152)
 
 [node name="Entidades" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -33,10 +33,10 @@ y_sort_enabled = true
 y_sort_enabled = true
 
 [node name="Lia" parent="Entidades" instance=ExtResource("4_lia")]
-position = Vector2(264, 120)
+position = Vector2(264, 152)
 
 [node name="Tome" parent="Entidades" instance=ExtResource("5_npc")]
-position = Vector2(104, 130)
+position = Vector2(104, 162)
 id_npc = "tome"
 dialogo_inicial = "tome_inicio"
 dialogo_repetido = "tome_repetido"
@@ -46,12 +46,12 @@ dialogos_por_flag = {
 }
 
 [node name="ArmaduraCaida" parent="Entidades" instance=ExtResource("7_armadura")]
-position = Vector2(328, 296)
+position = Vector2(328, 328)
 sir_eco = NodePath("../SirEco")
 
 [node name="SirEco" parent="Entidades" instance=ExtResource("6_eco")]
 visible = false
-position = Vector2(328, 296)
+position = Vector2(328, 328)
 
 [node name="Interface" type="CanvasLayer" parent="."]
 

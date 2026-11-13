@@ -56,6 +56,13 @@ const CERCA := Vector2i(4, 1)
 const PISO := Vector2i(5, 1)
 const BLOQUEIO := Vector2i(6, 1)   # tile invisível que só bloqueia a passagem
 
+# Variações: o mapa escolhe entre elas para o chão não ficar repetitivo.
+const VARIACOES := {
+	GRAMA: [GRAMA, Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2)],
+	AREIA: [AREIA, Vector2i(3, 2)],
+	AGUA: [AGUA, Vector2i(4, 2)],
+}
+
 const CENA_ARVORE := preload("res://scenes/mundo/arvore.tscn")
 
 # LEGENDA: cada letra do arquivo vira um tile no "chao" e, se tiver,
@@ -73,6 +80,7 @@ const LEGENDA := {
 	"-": {"chao": ESPUMA},
 	"_": {"chao": PISO},
 	"R": {"chao": GRAMA, "objeto": ROCHA},
+	"r": {"chao": AREIA, "objeto": ROCHA},
 	"T": {"chao": GRAMA, "objeto": BLOQUEIO, "arvore": "floresta"},
 	"A": {"chao": GRAMA, "arvore": "sozinha"},
 	"t": {"chao": GRAMA, "objeto": ARVORE},  # arvorezinha antiga de 1 tile
@@ -116,7 +124,7 @@ func gerar_mapa() -> void:
 				continue
 			var regra: Dictionary = LEGENDA[letra]
 			var celula := Vector2i(x, y)
-			chao.set_cell(celula, FONTE, regra["chao"])
+			chao.set_cell(celula, FONTE, _variar(regra["chao"], celula))
 			if regra.has("objeto"):
 				objetos.set_cell(celula, FONTE, regra["objeto"])
 			if regra.get("arvore", "") == "sozinha":
@@ -132,6 +140,14 @@ func gerar_mapa() -> void:
 		_criar_arvores.call_deferred(celulas_arvores)
 
 	print("Mapa gerado: %d linhas de '%s'" % [linhas.size(), arquivo_mapa])
+
+
+## Troca o tile por uma das suas variações (sempre a mesma para a mesma célula).
+func _variar(tile: Vector2i, celula: Vector2i) -> Vector2i:
+	if not VARIACOES.has(tile):
+		return tile
+	var opcoes: Array = VARIACOES[tile]
+	return opcoes[posmod(celula.x * 7 + celula.y * 13, opcoes.size())]
 
 
 ## Apaga todos os tiles das duas camadas e as árvores grandes.
