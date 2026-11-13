@@ -45,13 +45,43 @@ def pinta(img, x, y, cor):
         img.putpixel((x, y), cor + (255,))
 
 
+# Raízes: (início no tronco, ponto de curva, ponta no chão, grossura inicial).
+# Cada raiz sai do tronco, desce e se curva para fora, afinando até a ponta.
+RAIZES = [
+    ((CX - 3, BASE_Y - 7), (CX - 6, BASE_Y - 1), (CX - 12, BASE_Y), 4),   # esquerda
+    ((CX + 3, BASE_Y - 7), (CX + 6, BASE_Y - 2), (CX + 11, BASE_Y - 1), 4),  # direita
+    ((CX + 1, BASE_Y - 4), (CX + 2, BASE_Y), (CX + 5, BASE_Y + 1), 3),     # frente
+    ((CX - 1, BASE_Y - 4), (CX - 3, BASE_Y - 1), (CX - 5, BASE_Y + 1), 2),  # frente (pequena)
+]
+
+
+def _curva(p0, p1, p2, t):
+    """Ponto numa curva suave (Bézier quadrática) entre p0 e p2, puxada por p1."""
+    a = (1 - t) ** 2
+    b = 2 * (1 - t) * t
+    c = t ** 2
+    return (a * p0[0] + b * p1[0] + c * p2[0], a * p0[1] + b * p1[1] + c * p2[1])
+
+
+def raiz(img, pal, inicio, curva, ponta, grossura):
+    passos = 40
+    for k in range(passos + 1):
+        t = k / passos
+        x, y = _curva(inicio, curva, ponta, t)
+        g = max(1, round(grossura * (1 - t) + 0.4))
+        x, y = round(x), round(y)
+        for d in range(g):
+            # em cima da raiz bate luz, embaixo fica a sombra
+            cor = pal[2] if d == 0 else (pal[0] if d == g - 1 and g > 2 else pal[1])
+            pinta(img, x, y + d - g + 1, cor)
+
+
 def tronco(img, pal, rnd):
-    """Tronco que afina para cima e três raízes que se abrem embaixo."""
-    for y in range(TOPO_TRONCO, BASE_Y + 1):
-        t = (y - TOPO_TRONCO) / (BASE_Y - TOPO_TRONCO)
-        meia = 3 + t * 1.5
-        if y > BASE_Y - 9:
-            meia += (y - (BASE_Y - 9)) * 1.3
+    """Tronco levemente mais largo embaixo, com raízes curvas saindo dele."""
+    fim = BASE_Y - 3
+    for y in range(TOPO_TRONCO, fim + 1):
+        t = (y - TOPO_TRONCO) / (fim - TOPO_TRONCO)
+        meia = 3.5 + t * 1.2
         x0, x1 = round(CX - meia), round(CX + meia)
         for x in range(x0, x1 + 1):
             u = (x - x0) / max(1, x1 - x0)
@@ -66,17 +96,16 @@ def tronco(img, pal, rnd):
     # sulcos verticais da casca
     for _ in range(7):
         x = rnd.randint(CX - 2, CX + 2)
-        y = rnd.randint(TOPO_TRONCO + 2, BASE_Y - 10)
+        y = rnd.randint(TOPO_TRONCO + 2, fim - 6)
         for k in range(rnd.randint(3, 6)):
             pinta(img, x, y + k, pal[0])
-    # separa as raízes (dois "vãos" em forma de V invertido)
-    for lado in (-1, 1):
-        for k in range(7):
-            x = CX + lado * (2 + k // 2)
-            if k < 4:
-                img.putpixel((x, BASE_Y - k), (0, 0, 0, 0))  # vão transparente
-            else:
-                pinta(img, x, BASE_Y - k, pal[0])            # sombra no encontro
+    # um buraquinho no tronco (charme!)
+    pinta(img, CX + 1, TOPO_TRONCO + 14, pal[0])
+    pinta(img, CX + 1, TOPO_TRONCO + 15, pal[0])
+    pinta(img, CX + 2, TOPO_TRONCO + 15, pal[0])
+    # as raízes (as de trás primeiro, as da frente por cima)
+    for (inicio, curva, ponta, grossura) in RAIZES:
+        raiz(img, pal, inicio, curva, ponta, grossura)
 
 
 def galho(img, x, y, ang, comp, grossura, pal, rnd, neve, nivel=0):
@@ -157,7 +186,7 @@ def contorno(img, fator=0.4):
 def sombra_no_chao(img):
     for y in range(BASE_Y - 2, A):
         for x in range(L):
-            if ((x - CX) / 15) ** 2 + ((y - (BASE_Y + 0.5)) / 3) ** 2 <= 1 and img.getpixel((x, y))[3] == 0:
+            if ((x - CX) / 16) ** 2 + ((y - (BASE_Y + 1.5)) / 2.5) ** 2 <= 1 and img.getpixel((x, y))[3] == 0:
                 img.putpixel((x, y), (20, 30, 20, 90))
 
 
@@ -168,8 +197,10 @@ def quadro(estacao, semente=7):
         tronco(img, TRONCO_INVERNO, rnd)
         for ang, comp in ((-2.35, 13), (-1.85, 15), (-1.3, 15), (-0.8, 13)):
             galho(img, CX, TOPO_TRONCO + 2, ang, comp, 4, TRONCO_INVERNO, rnd, True)
-        for x in range(CX - 10, CX + 11):          # neve nas raízes
-            pinta(img, x, BASE_Y, NEVE[1])
+        for (inicio, curva, ponta, grossura) in RAIZES:   # neve em cima das raízes
+            for k in range(0, 30, 7):
+                x, y = _curva(inicio, curva, ponta, k / 30)
+                pinta(img, round(x), round(y) - grossura, NEVE[1])
     else:
         tronco(img, TRONCO, rnd)                     # primeiro o tronco...
         copa(img, FOLHAS[estacao], rnd, flores=(estacao == "primavera"))  # ...a copa por cima

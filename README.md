@@ -6,6 +6,11 @@ RPG de fantasia medieval em pixel art feito em **Godot 4** com **GDScript**.
 > e Sir Eco, uma armadura viva e vazia, partem para reacender as cinco Torres de Luz
 > e enfrentar Malvoran, o Rei Caído.
 
+## Planejamento
+
+- `docs/cenarios_das_fases.md` — as regiões/fases do jogo, chefes, mecânicas e lista de arte.
+- `docs/paletas_das_fases.png` — paleta de cores de cada região.
+
 ## Como abrir o projeto
 
 1. Abra o Godot (Flatpak) → **Importar** → escolha o arquivo `project.godot` desta pasta.
